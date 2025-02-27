@@ -2,47 +2,72 @@ import React, { useState, useEffect } from "react";
 import { useProjects } from "./ProjectContext";
 import { Button, Select } from "antd";
 
-const CreateTask = ({ onAddTask, onUpdateTask, onCancel, initialData, taskBeingEdited }) => {
-  const { allProjects, projects, inbox, selectedProjectId } =
-    useProjects();
+const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialData, taskBeingEdited }) => {
+  const { allProjects, projects, inbox, selectedProjectId } = useProjects();
 
-    console.log(selectedProjectId);
+  console.log("Selected Project ID:", selectedProjectId);
+  console.log("Initial Data:", initialData);
+  console.log("All Projects:", allProjects);
 
   const [taskContent, setTaskContent] = useState(initialData?.content || "");
   const [taskDescription, setTaskDescription] = useState(initialData?.description || "");
-
   const [projectId, setProjectId] = useState(
-    initialData?.projectId || selectedProjectId || inbox?.id || (projects[0] && projects[0].id) // Default to selectedProjectId, inbox, or first project
+    initialData?.projectId || selectedProjectId || inbox?.id || (projects[0] && projects[0].id) || null
   );
 
-  const handleAddorUpdateTask = () => {
+  console.log("Project ID State:", projectId);
+
+  useEffect(() => {
+    if (initialData?.projectId) {
+      setProjectId(initialData.projectId);
+    }
+  }, [initialData]);
+
+  const handleAddorUpdateTask = async () => {
     if (!taskContent) {
       alert("Task content cannot be empty!");
       return;
     }
 
-    const taskData = taskBeingEdited
-        ? {
-              ...initialData,
-              content: taskContent,
-              description: taskDescription,
-              projectId,
-          }
-        : {
-              content: taskContent,
-              description: taskDescription,
-              projectId,
-          };
 
-    taskBeingEdited ? onUpdateTask(taskData) : onAddTask(taskData);
-    onCancel(); // Hide the AddTask form
-    setTaskContent("");
-    setTaskDescription("");
+    try {
+      if (taskBeingEdited) {
+        if (initialData.projectId !== projectId) {
+          // Delete task from the old project
+          await onDeleteTask(initialData.id, initialData.projectId);
+          // Create task in the new project
+          await onAddTask({
+            content: taskContent,
+            description: taskDescription,
+            projectId,
+          });
+        } else {
+          // Just update task if projectId hasn't changed
+          await onUpdateTask({
+            ...initialData,
+            content: taskContent,
+            description: taskDescription,
+          });
+        }
+      } else {
+        await onAddTask({
+          content: taskContent,
+          description: taskDescription,
+          projectId,
+        });
+      }
+
+      onCancel();
+      setTaskContent("");
+      setTaskDescription("");
+    } catch (error) {
+      console.error("Error handling task:", error);
+    }
   };
 
   const handleProjectChange = (value) => {
+    console.log("Selected Project ID:", value);
     setProjectId(value);
-    console.log(value, "Project ID changed");
   };
 
   return (
@@ -53,7 +78,6 @@ const CreateTask = ({ onAddTask, onUpdateTask, onCancel, initialData, taskBeingE
         value={taskContent}
         onChange={(e) => setTaskContent(e.target.value)}
         className="w-full text-[20px] font-bold p-2 mb-3 rounded-md focus:outline-none focus:ring-0"
-
       />
       <textarea
         placeholder="Task Description"
@@ -69,7 +93,7 @@ const CreateTask = ({ onAddTask, onUpdateTask, onCancel, initialData, taskBeingE
           key="project-select"
           value={projectId}
           onChange={handleProjectChange}
-          style={{ width: "20%" }} 
+          style={{ width: "20%" }}
           placeholder="Select a project"
         >
           {allProjects.map((project) => (
@@ -83,17 +107,15 @@ const CreateTask = ({ onAddTask, onUpdateTask, onCancel, initialData, taskBeingE
           <Button
             onClick={onCancel}
             className="bg-[#ebe8e8] text-black px-2 py-1 rounded-md hover:!bg-gray-400 hover:!text-white"
-
           >
             Cancel
           </Button>
           <Button
-  onClick={handleAddorUpdateTask}
-  className="!bg-[#DC4C3E] !hover:bg-[#B03A30] !text-white border-none"
->
-  {taskBeingEdited === null ? 'Add Task' : 'Save'}
-</Button>
-
+            onClick={handleAddorUpdateTask}
+            className="!bg-[#DC4C3E] !hover:bg-[#B03A30] !text-white border-none"
+          >
+            {taskBeingEdited === null ? "Add Task" : "Save"}
+          </Button>
         </div>
       </div>
     </div>

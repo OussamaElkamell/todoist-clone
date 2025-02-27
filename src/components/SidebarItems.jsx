@@ -5,6 +5,7 @@ import AddTaskModal from "./AddTaskModal";
 import { useProjects } from "./ProjectContext";
 import { IoIosAddCircle } from "react-icons/io";
 import { Avatar } from "antd";
+import { Link } from "react-router-dom";
 
 const SidebarItems = () => {
 
@@ -41,13 +42,14 @@ const SidebarItems = () => {
 
       {/* Inbox */}
       {inbox && (
-        <div className="mb-4">
+         <Link to={`/my-projects/${inbox.name}`}>
+        <div className="mb-4"  onClick={() => setSelectedProjectId(inbox.id)}>
           <ul>
             <li
               // onClick={() => setSelectedProjectId(inbox.id)}
-              className={`font-medium text-[17px] p-2 pl-0 rounded cursor-pointer ${
+              className={`font-medium text-[17px] p-2 pl-2 rounded cursor-pointer ${
                 selectedProjectId === inbox.id
-                  ? "bg-orange-200 text-orange-700"
+                  ? "bg-[#FFEFE5] text-orange-700"
                   : "hover:bg-gray-200"
               }`}
             >
@@ -55,6 +57,7 @@ const SidebarItems = () => {
             </li>
           </ul>
         </div>
+        </Link>
       )}
 
       {/* Favorites Section */}

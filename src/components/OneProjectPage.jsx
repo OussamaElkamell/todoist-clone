@@ -42,16 +42,22 @@ const OneProjectPage = () => {
     setLoading(true);
     try {
       const allTasks = await api.getTasks();
-      const filteredTasks = allTasks.filter(
-        (task) => task.projectId === selectedProjectId
-      );
-      setTasks(filteredTasks);
+      
+      if (selectedProjectId === "inbox") {
+        setTasks(allTasks); // Show all tasks when Inbox is selected
+      } else {
+        const filteredTasks = allTasks.filter(
+          (task) => task.projectId === selectedProjectId
+        );
+        setTasks(filteredTasks);
+      }
     } catch (error) {
       console.error("Error fetching tasks:", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     const matchedProject = allProjects.find(
@@ -109,17 +115,24 @@ const OneProjectPage = () => {
 
   const handleUpdateTask = async (updatedTask) => {
     try {
-      await api.updateTask(updatedTask.id, updatedTask);
+      const response = await api.updateTask(updatedTask.id, updatedTask);
+      console.log("updatedTaskId",updatedTask.projectId);
+      
+      console.log("API Response:", response); // Debugging
+  
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+          task.id === updatedTask.id ? { ...task, projectId: updatedTask.projectId } : task
         )
       );
+      
+  
       setTaskBeingEdited(null);
     } catch (error) {
       console.error("Error updating task:", error);
     }
   };
+  
 
   // Handle task reordering
   const handleDragEnd = async (result) => {
@@ -201,6 +214,8 @@ const OneProjectPage = () => {
                             onCancel={() => setTaskBeingEdited(null)}
                             initialData={task}
                             taskBeingEdited={taskBeingEdited}
+                            onDeleteTask={handleDeleteTask}
+                            onAddTask={handleAddTask}
                           />
                         ) : (
                           <>

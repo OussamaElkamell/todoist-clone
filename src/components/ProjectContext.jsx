@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { TodoistApi } from "@doist/todoist-api-typescript";
+import { useParams } from "react-router-dom";
 
 const ProjectContext = createContext();
 
@@ -15,7 +16,7 @@ export const ProjectProvider = ({ children }) => {
   const [selectedColor, setSelectedColor] = useState("charcoal");
   const [hoveredProjectId, setHoveredProjectId] = useState(null);
   const [editingProject, setEditingProject] = useState(null);
-
+  
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
