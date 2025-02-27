@@ -6,6 +6,8 @@ import { useProjects } from "./ProjectContext";
 import { IoIosAddCircle } from "react-icons/io";
 import { Avatar } from "antd";
 import { Link } from "react-router-dom";
+import { FiInbox } from "react-icons/fi";
+import { InboxOutlined } from "@ant-design/icons";
 
 const SidebarItems = () => {
 
@@ -29,7 +31,7 @@ const SidebarItems = () => {
    
           <IoIosAddCircle size={30}  style={{color:"#DC4C3E"}}/>
        
-        <span className="font-medium text-[14px] text-[#DC4C3E]">Add Task</span>
+        <span className="font-medium text-[14px] text-[#A82206]">Add Task</span>
       </div>
 
       {/* Add Task Modal */}
@@ -42,23 +44,31 @@ const SidebarItems = () => {
 
       {/* Inbox */}
       {inbox && (
-         <Link to={`/my-projects/${inbox.name}`}>
-        <div className="mb-4"  onClick={() => setSelectedProjectId(inbox.id)}>
-          <ul>
-            <li
-              // onClick={() => setSelectedProjectId(inbox.id)}
-              className={`font-medium text-[17px] p-2 pl-2 rounded cursor-pointer ${
+  <Link to={`/my-projects/${inbox.name}`}>
+    <div className="mb-4" onClick={() => setSelectedProjectId(inbox.id)}>
+      <ul>
+        <li
+          className={`font-medium text-[17px] p-2 pl-2 rounded cursor-pointer ${
+            selectedProjectId === inbox.id
+              ? "bg-[#FFEFE5] text-orange-700"
+              : "hover:bg-gray-200"
+          }`}
+        >
+          <div className="flex items-center">
+            <InboxOutlined
+              className={`text-xl mr-2 ${
                 selectedProjectId === inbox.id
-                  ? "bg-[#FFEFE5] text-orange-700"
-                  : "hover:bg-gray-200"
+                  ? "text-orange-700"
+                  : "text-gray-600"
               }`}
-            >
-              {inbox.name}
-            </li>
-          </ul>
-        </div>
-        </Link>
-      )}
+            />
+            <span className="text-sm font-normal">{inbox.name}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </Link>
+)}
 
       {/* Favorites Section */}
       <Favorites/>

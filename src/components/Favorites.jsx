@@ -57,7 +57,7 @@ const Favorites = () => {
       {favorites.length > 0 && (
         <>
           <div className="flex items-center justify-between cursor-pointer mb-2">
-            <h2 className="text-gray-700 font-semibold">Favorites</h2>
+            <h2 className="text-gray-500 text-sm font-semibold">Favorites</h2>
             <span
               className="text-gray-600 text-[15px] p-1 hover:bg-gray-200 rounded-sm"
               onClick={() => setFavoritesVisible(!favoritesVisible)}
@@ -106,7 +106,7 @@ const Favorites = () => {
                         >
                           #
                         </span>
-                        <span>{project.name}</span>
+                        <span style={{fontSize:"14px"}}>{project.name}</span>
                       </div>
                     </Link>
                   </div>

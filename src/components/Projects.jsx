@@ -61,7 +61,7 @@ const Projects = () => {
         {/* Use Link for navigation */}
         <Link
           to="/"
-          className="text-gray-700 font-semibold hover:text-gray-700"
+          className="text-gray-500 font-semibold text-sm hover:text-gray-700"
         >
           My Projects
         </Link>
@@ -122,7 +122,7 @@ const Projects = () => {
                     >
                       #
                     </span>
-                    <span>{project.name}</span>
+                    <span style={{fontSize:"14px"}}>{project.name}</span>
                   </div>
                 </Link>
               </div>

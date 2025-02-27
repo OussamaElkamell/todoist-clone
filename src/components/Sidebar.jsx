@@ -5,9 +5,10 @@ import "../App.css";
 import SidebarItems from "./SidebarItems";
 
 const Sidebar = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true); //Intially open
+  const [isDrawerOpen, setIsDrawerOpen] = useState(window.innerWidth > 768);
   const [drawerWidth, setDrawerWidth] = useState(270);
   const [isResizing, setIsResizing] = useState(false);
+
 
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
