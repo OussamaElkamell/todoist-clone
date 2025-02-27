@@ -32,38 +32,50 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
 
     try {
       if (taskBeingEdited) {
-        if (initialData.projectId !== projectId) {
-          // Delete task from the old project
-          await onDeleteTask(initialData.id, initialData.projectId);
-          // Create task in the new project
+        if (initialData?.id) {
+          if (initialData.projectId !== projectId) {
+            // Delete task from the old project
+            await onDeleteTask(initialData.id, initialData.projectId);
+            // Create task in the new project
+            await onAddTask({
+              content: taskContent,
+              description: taskDescription,
+              projectId,
+            });
+          } else {
+            // Just update the task if the projectId hasn't changed
+            await onUpdateTask({
+              ...initialData,
+              content: taskContent,
+              description: taskDescription,
+              projectId,  // Ensure projectId is included in updates
+            });
+          }
+        } else {
+          // Handle a case where `initialData.id` is undefined (defensive check)
+          console.warn("Task being edited has no ID, treating as new task.");
           await onAddTask({
             content: taskContent,
             description: taskDescription,
             projectId,
           });
-        } else {
-          // Just update task if projectId hasn't changed
-          await onUpdateTask({
-            ...initialData,
-            content: taskContent,
-            description: taskDescription,
-          });
         }
       } else {
+        // Creating a new task
         await onAddTask({
           content: taskContent,
           description: taskDescription,
           projectId,
         });
       }
-
+    
       onCancel();
       setTaskContent("");
       setTaskDescription("");
     } catch (error) {
       console.error("Error handling task:", error);
     }
-  };
+  }    
 
   const handleProjectChange = (value) => {
     console.log("Selected Project ID:", value);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Drawer } from "antd";
+import { Avatar, Drawer } from "antd";
 import SidebarIcon from "../assets/sidebar19.svg";
 import "../App.css";
 import SidebarItems from "./SidebarItems";
@@ -39,6 +39,7 @@ const Sidebar = () => {
 
   return (
     <div className="relative">
+
       {/* Sidebar Icon */}
       <img
         src={SidebarIcon}

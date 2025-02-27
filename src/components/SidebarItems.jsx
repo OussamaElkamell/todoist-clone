@@ -14,7 +14,7 @@ const SidebarItems = () => {
 
   return (
     <div className="text-[16px]">
-   <div style={{ display: "flex", alignItems: "center", width: "100%", marginBottom:"20px"}}>
+   <div style={{ display: "flex", alignItems: "center", width: "100%", position:"absolute",top:10}}>
         <Avatar style={{ backgroundColor: "#fde3cf", color: "#f56a00", marginRight:"10px"}}>
           {"Alex".charAt(0).toUpperCase()}
         </Avatar>
@@ -24,12 +24,12 @@ const SidebarItems = () => {
       
       </div>
       <div 
-        className="mb-4 flex items-center gap-2 cursor-pointer"
+        className="mb-4  flex items-center gap-2 cursor-pointer"
         onClick={() => setTasksModalVisible(true)}>
    
-          <IoIosAddCircle size={25}  style={{color:"#DC4C3E"}}/>
+          <IoIosAddCircle size={30}  style={{color:"#DC4C3E"}}/>
        
-        <span className="font-medium text-[17px] text-[#DC4C3E]">Add Task</span>
+        <span className="font-medium text-[14px] text-[#DC4C3E]">Add Task</span>
       </div>
 
       {/* Add Task Modal */}
