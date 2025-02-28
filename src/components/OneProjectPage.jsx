@@ -18,6 +18,9 @@ const OneProjectPage = () => {
     selectedProjectId,
     tasks,
     setTasks,
+    setTasksCompleted,
+    tasksCompleted,
+      closeTask
   } = useProjects();
 
   const { projectName } = useParams();
@@ -36,7 +39,7 @@ const OneProjectPage = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, [api, selectedProjectId]);
+  }, [api, selectedProjectId,tasksCompleted]);
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -103,6 +106,32 @@ const OneProjectPage = () => {
       console.error("Error adding task:", error);
     }
   };
+  const handleCloseTask = async (taskId) => {
+    try {
+      await closeTask(taskId);
+
+      // Update the completed tasks state
+      setTasksCompleted((prevTasks) =>
+          prevTasks.map((task) =>
+              task.id === taskId ? { ...task, isCompleted: true } : task
+          )
+      );
+
+      // Also update the main task list (setTasks)
+      setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+              task.id === taskId ? { ...task, isCompleted: true } : task
+          )
+      );
+
+      console.log(`Task ${taskId} closed successfully.`);
+    } catch (error) {
+      console.error(`Failed to close task ${taskId}:`, error.message || error);
+    }
+  };
+
+
+
 
   const handleDeleteTask = async (taskId) => {
     try {
@@ -223,7 +252,7 @@ const OneProjectPage = () => {
                               <input
                                 type="checkbox"
                                 className="absolute opacity-0 w-[18px] h-[18px] cursor-pointer"
-                                onClick={() => handleDeleteTask(task.id)}
+                                onClick={() => handleCloseTask(task.id)}
                               />
                               <div className="w-[18px] h-[18px] rounded-full border border-gray-400 flex justify-center items-center cursor-pointer">
                                 <img

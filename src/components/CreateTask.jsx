@@ -3,7 +3,7 @@ import { useProjects } from "./ProjectContext";
 import { Button, Select } from "antd";
 
 const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialData, taskBeingEdited }) => {
-  const { allProjects, projects, inbox, selectedProjectId } = useProjects();
+  const { allProjects, projects, inbox, selectedProjectId ,setTasks} = useProjects();
 
   console.log("Selected Project ID:", selectedProjectId);
   console.log("Initial Data:", initialData);
@@ -28,33 +28,32 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
       alert("Task content cannot be empty!");
       return;
     }
-
-
     try {
+      let updatedTask = null;
+
       if (taskBeingEdited) {
         if (initialData?.id) {
           if (initialData.projectId !== projectId) {
-            // Delete task from the old project
+            // Delete from old project
             await onDeleteTask(initialData.id, initialData.projectId);
-            // Create task in the new project
-            await onAddTask({
+            // Add new task in the new project
+            updatedTask = await onAddTask({
               content: taskContent,
               description: taskDescription,
               projectId,
             });
           } else {
-            // Just update the task if the projectId hasn't changed
-            await onUpdateTask({
+            // Update task in the same project
+            updatedTask = await onUpdateTask({
               ...initialData,
               content: taskContent,
               description: taskDescription,
-              projectId,  // Ensure projectId is included in updates
+              projectId,
             });
           }
         } else {
-          // Handle a case where `initialData.id` is undefined (defensive check)
           console.warn("Task being edited has no ID, treating as new task.");
-          await onAddTask({
+          updatedTask = await onAddTask({
             content: taskContent,
             description: taskDescription,
             projectId,
@@ -62,20 +61,28 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
         }
       } else {
         // Creating a new task
-        await onAddTask({
+        updatedTask = await onAddTask({
           content: taskContent,
           description: taskDescription,
           projectId,
         });
       }
-    
+
+      // Ensure the state is updated with the new task
+      if (updatedTask) {
+        // Assuming onAddTask or onUpdateTask returns the new task object
+        console.log("Updated Task:", updatedTask);
+      }
+
+      // Reset fields and close modal
       onCancel();
       setTaskContent("");
       setTaskDescription("");
     } catch (error) {
       console.error("Error handling task:", error);
     }
-  }    
+  };
+
 
   const handleProjectChange = (value) => {
     console.log("Selected Project ID:", value);

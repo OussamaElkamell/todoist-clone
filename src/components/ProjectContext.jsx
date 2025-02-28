@@ -11,12 +11,12 @@ const api = new TodoistApi("f8aa321b37a101eda36d0ace6714e63e66bd8646");
 export const ProjectProvider = ({ children }) => {
   const [allProjects, setAllProjects] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
-
+const [tasksCompleted,setTasksCompleted]=useState([])
   const [projectsmodalVisible, setProjectsModalVisible] = useState(false);
   const [selectedColor, setSelectedColor] = useState("charcoal");
   const [hoveredProjectId, setHoveredProjectId] = useState(null);
   const [editingProject, setEditingProject] = useState(null);
-  
+
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -60,40 +60,72 @@ export const ProjectProvider = ({ children }) => {
       })
       .catch((error) => console.error("Error deleting task:", error));
   };
-  
-  return (
-    <ProjectContext.Provider
-      value={{
-        api,
-        allProjects,
-        inbox,
-        favorites,
-        projects,
-        addProject,
-        deleteProject,
-        updateProject,
+    const closeTask = (taskId) => {
+        api
+            .closeTask(taskId)
+            .then(() => {
+                setTasks((prevTasks) =>
+                    prevTasks.map((task) =>
+                        task.id === taskId ? { ...task, isCompleted: true } : task
+                    )
+                );
+            })
+            .catch((error) => console.error("Error closing task:", error));
+    };
 
-        selectedProjectId,
-        setSelectedProjectId,
 
-        projectsmodalVisible,
-        setProjectsModalVisible,
+    const getCompletedTasks = async () => {
+        try {
+            const response = await fetch("http://localhost:3001/api/completed-tasks");
+            if (!response.ok) throw new Error("Failed to fetch tasks");
+            const data = await response.json();
+            setTasksCompleted(data.items || []);
+        } catch (error) {
+            console.error("Error fetching completed tasks:", error);
+        }
+    };
 
-        selectedColor,
-        setSelectedColor,
 
-        hoveredProjectId,
-        setHoveredProjectId,
 
-        editingProject,
-        setEditingProject,
 
-        tasks,
-        setTasks,
-        deleteTask
-      }}
-    >
-      {children}
-    </ProjectContext.Provider>
-  );
+    useEffect(()=>{getCompletedTasks()},[])
+    return (
+        <ProjectContext.Provider
+            value={{
+                api,
+                allProjects,
+                inbox,
+                favorites,
+                projects,
+                addProject,
+                deleteProject,
+                updateProject,
+
+                selectedProjectId,
+                setSelectedProjectId,
+
+                projectsmodalVisible,
+                setProjectsModalVisible,
+
+                selectedColor,
+                setSelectedColor,
+
+                hoveredProjectId,
+                setHoveredProjectId,
+
+                editingProject,
+                setEditingProject,
+                tasksCompleted,
+                setTasksCompleted,
+                tasks,
+                setTasks,
+                deleteTask,
+                closeTask,
+
+            }}
+        >
+            {children}
+        </ProjectContext.Provider>
+
+    );
 };
