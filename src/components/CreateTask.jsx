@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useProjects } from "./ProjectContext";
-import { Button, Select } from "antd";
-
+import { DatePicker, Dropdown, Menu, Button ,Select} from "antd";
+import { FaCalendar, FaFlag, FaBell } from "react-icons/fa";
+import {IoFlagOutline} from "react-icons/io5";
+import {LuAlarmClock} from "react-icons/lu";
 const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialData, taskBeingEdited }) => {
   const { allProjects, projects, inbox, selectedProjectId ,setTasks} = useProjects();
 
-  console.log("Selected Project ID:", selectedProjectId);
-  console.log("Initial Data:", initialData);
-  console.log("All Projects:", allProjects);
+  console.log("taskBeingEdited:",taskBeingEdited);
 
   const [taskContent, setTaskContent] = useState(initialData?.content || "");
   const [taskDescription, setTaskDescription] = useState(initialData?.description || "");
@@ -90,54 +90,149 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
   };
 
   return (
-    <div className="add-task-container w-full p-2 mt-4 border-2 border-gray-300 rounded-md shadow-sm">
-      <input
-        type="text"
-        placeholder="Task Content"
-        value={taskContent}
-        onChange={(e) => setTaskContent(e.target.value)}
-        className="w-full text-[20px] font-bold p-2 mb-3 rounded-md focus:outline-none focus:ring-0"
-      />
-      <textarea
-        placeholder="Task Description"
-        value={taskDescription}
-        onChange={(e) => setTaskDescription(e.target.value)}
-        className="w-full p-2 mb-3 rounded-md focus:outline-none focus:ring-0"
-        rows={1}
-      />
-      <hr />
+      <div className="add-task-container w-full p-4 mt-4 border-2 border-gray-300 rounded-md shadow-sm bg-white">
+        {/* Task Name Input */}
+        <input
+            type="text"
+            placeholder="Task name"
+            value={taskContent}
+            onChange={(e) => setTaskContent(e.target.value)}
+            className="w-full font-bold rounded-md focus:outline-none focus:ring-0 mb-2"
+        />
 
-      <div className="mt-2 w-full flex justify-between items-center">
-        <Select
-          key="project-select"
-          value={projectId}
-          onChange={handleProjectChange}
-          style={{ width: "20%" }}
-          placeholder="Select a project"
-        >
-          {allProjects.map((project) => (
-            <Select.Option key={project.id} value={project.id}>
-              {project.name}
-            </Select.Option>
-          ))}
-        </Select>
+        {/* Description Textarea */}
+        <textarea
+            placeholder="Description"
+            value={taskDescription}
+            onChange={(e) => setTaskDescription(e.target.value)}
+            className="w-full text-sm text-gray-600 rounded-md focus:outline-none focus:ring-0 resize-none"
+            rows={2}
+        />
 
-        <div className="flex space-x-2">
-          <Button
-            onClick={onCancel}
-            className="bg-[#ebe8e8] text-black px-2 py-1 rounded-md hover:!bg-gray-400 hover:!text-white"
+        {/* Date, Priority, and Reminders Dropdowns */}
+        <div className="flex space-x-4">
+          {/* Date Dropdown */}
+          <Dropdown
+              overlay={
+                <Menu>
+                  <Menu.Item key="1">
+                    <DatePicker
+                        placeholder="Select date"
+                        onChange={(date) => setTaskDate(date)} // Handle date selection
+                        className="w-full"
+                    />
+                  </Menu.Item>
+                </Menu>
+              }
+              trigger={["click"]} // Open dropdown on click
           >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleAddorUpdateTask}
-            className="!bg-[#DC4C3E] !hover:bg-[#B03A30] !text-white border-none"
+            <div
+                aria-label="Set date"
+                role="button"
+                tabIndex={0}
+                className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            >
+              {/* Calendar Icon */}
+              <FaCalendar className="text-gray-500" /> {/* Calendar icon from react-icons */}
+              {/* Date Text */}
+              <span className="text-sm text-gray-600">Date</span>
+            </div>
+          </Dropdown>
+
+          {/* Priority Dropdown */}
+          <Dropdown
+              overlay={
+                <Menu>
+                  <Menu.Item key="1">Priority 1</Menu.Item>
+                  <Menu.Item key="2">Priority 2</Menu.Item>
+                  <Menu.Item key="3">Priority 3</Menu.Item>
+                  <Menu.Item key="4">Priority 4</Menu.Item>
+                </Menu>
+              }
+              trigger={["click"]} // Open dropdown on click
           >
-            {taskBeingEdited === null ? "Add Task" : "Save"}
-          </Button>
+            <div
+                data-priority="4"
+                aria-label="Set priority"
+                aria-owns="dropdown-select-132-popup"
+                aria-controls="dropdown-select-132-popup"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                data-action-hint="task-actions-priority-picker"
+                role="button"
+                tabIndex={0}
+                className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            >
+              {/* Priority Icon */}
+              <IoFlagOutline className="text-gray-500" /> {/* Flag icon from react-icons */}
+              {/* Priority Text */}
+              <span className="text-sm text-gray-600">Priority</span>
+            </div>
+          </Dropdown>
+
+          {/* Reminders Dropdown */}
+          <Dropdown
+              overlay={
+                <Menu>
+                  <Menu.Item key="1">Before task</Menu.Item>
+                  <Menu.Item key="2">Add a time to the task first</Menu.Item>
+                  <Menu.Item key="3">Add reminder</Menu.Item>
+                </Menu>
+              }
+              trigger={["click"]} // Open dropdown on click
+          >
+            <div
+                aria-label="Set reminders"
+                role="button"
+                tabIndex={0}
+                className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            >
+              {/* Reminders Icon */}
+              <LuAlarmClock className="text-gray-500" /> {/* Bell icon from react-icons */}
+              {/* Reminders Text */}
+              <span className="text-sm text-gray-600">Reminders</span>
+            </div>
+          </Dropdown>
+        </div>
+
+        {/* Divider */}
+        <hr className="my-3 border-gray-200" />
+
+        {/* Bottom Section: Project Select and Buttons */}
+        <div className="mt-2 w-full flex justify-between items-center">
+          {/* Project Select Dropdown */}
+          <Select
+              key="project-select"
+              value={projectId}
+              onChange={handleProjectChange}
+              style={{ width: "30%" }}
+              placeholder="Select a project"
+              className="text-sm"
+          >
+            {allProjects.map((project) => (
+                <Select.Option key={project.id} value={project.id}>
+                  {project.name}
+                </Select.Option>
+            ))}
+          </Select>
+
+          {/* Buttons: Cancel and Add Task/Save */}
+          <div className="flex space-x-2">
+            <Button
+                onClick={onCancel}
+                className="bg-gray-100 text-gray-700 px-4 py-1 rounded-md hover:!bg-gray-200 transition-colors"
+            >
+              Cancel
+            </Button>
+            <Button
+                onClick={handleAddorUpdateTask}
+                className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors"
+            >
+              {taskBeingEdited === undefined ? "Add Task" : "Save"}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

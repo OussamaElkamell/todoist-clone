@@ -93,7 +93,7 @@ const AddTaskModal = ({ open, onClose}) => {
       ]}
     >
       <hr />
-      <div className="mb-4 mt-3">
+      <div className="mb-4 mt-3 w-full">
         <input
           type="text"
           value={taskContent}

@@ -8,7 +8,7 @@ import { useProjects } from "./ProjectContext";
 import TickMark from "../assets/tick-mark.svg";
 import "../App.css";
 import { IoIosAdd, IoIosAddCircle } from "react-icons/io";
-
+import  image from "../assets/Todoist-Image.png"
 const OneProjectPage = () => {
   const {
     api,
@@ -132,7 +132,6 @@ const OneProjectPage = () => {
 
 
 
-
   const handleDeleteTask = async (taskId) => {
     try {
       await api.deleteTask(taskId);
@@ -199,9 +198,9 @@ const OneProjectPage = () => {
       }
     }
   };
-  
+
   return (
-    <div className="p-5 font-sans flex flex-col justify-center items-center h-screen w-full">
+    <div className="font-sans flex flex-col justify-center items-center h-screen w-full">
     <div className="w-[45%] absolute top-20">
       {isEditing ? (
         <input
@@ -246,6 +245,7 @@ const OneProjectPage = () => {
                             onDeleteTask={handleDeleteTask}
                             onAddTask={handleAddTask}
                           />
+
                         ) : (
                           <>
                             <div className="relative">
@@ -288,29 +288,55 @@ const OneProjectPage = () => {
               </ul>
             )}
           </Droppable>
+
         </DragDropContext>
+
       )}
 
-      {/* For Add Task */}
-      {isAddTaskVisible ? (
-        <AddTask onAddTask={handleAddTask} onCancel={() => setIsAddTaskVisible(false)} />
-      ) : (
-        <div
-          style={{ display: "flex", flexDirection: "row" }}
-          onClick={() => setIsAddTaskVisible(true)}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          {isHovered ? (
-            <IoIosAddCircle size={30} style={{ color: "#D9534F" }} />
+      <div>
+        {/* Container for Add Task and Image */}
+        <div>
+          {/* For Add Task */}
+          {isAddTaskVisible ? (
+              <AddTask onAddTask={handleAddTask} onCancel={() => setIsAddTaskVisible(false)} />
           ) : (
-            <IoIosAdd size={30} style={{ color: "#D9534F" }} />
+              <div
+                  style={{ display: "flex", flexDirection: "row", position: "relative" }}
+                  onClick={() => setIsAddTaskVisible(true)}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+              >
+                {isHovered ? (
+                    <IoIosAddCircle size={30} style={{ color: "#D9534F" }} />
+                ) : (
+                    <IoIosAdd size={30} style={{ color: "#D9534F" }} />
+                )}
+                <b style={{ fontWeight: "normal", color: "gray", cursor: "pointer" }}>Add task</b>
+              </div>
           )}
-          <b style={{ fontWeight: "normal", color: "gray", cursor: "pointer" }}>Add task</b>
+
+          {/* Conditionally render the image and text */}
+          {tasks.length === 0 && (
+              <div
+                  className="flex flex-col items-center justify-center mt-10"
+                  style={{ marginTop: isAddTaskVisible ? "40px" : "20px" }} // Adjust marginTop as needed
+              >
+                <img
+                    src={image} // Replace with your actual image path
+                    alt="No Tasks"
+                    className="w-60 h-60"
+                />
+                <h2 className="text-black font-semibold">Start small (or dream big)...</h2>
+                <p className="text-gray-500 text-center">
+                  Add your tasks or find a template to get <br /> started with your project.
+                </p>
+              </div>
+          )}
         </div>
-      )}
+      </div>
+
     </div>
-  </div>
+    </div>
   );
 };
 
