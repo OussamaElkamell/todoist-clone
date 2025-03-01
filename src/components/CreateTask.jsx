@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useProjects } from "./ProjectContext";
-import { DatePicker, Dropdown, Menu, Button ,Select} from "antd";
+import { DatePicker, Dropdown, Menu, Button ,Select, Popover} from "antd";
 import { FaCalendar, FaFlag, FaBell } from "react-icons/fa";
 import {IoFlagOutline} from "react-icons/io5";
 import {LuAlarmClock} from "react-icons/lu";
+
 const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialData, taskBeingEdited }) => {
   const { allProjects, projects, inbox, selectedProjectId ,setTasks} = useProjects();
-
+  const [taskDate, setTaskDate] = useState(null);
+  const [datePopoverVisible, setDatePopoverVisible] = useState(false);
   console.log("taskBeingEdited:",taskBeingEdited);
 
   const [taskContent, setTaskContent] = useState(initialData?.content || "");
@@ -111,33 +113,35 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
 
         {/* Date, Priority, and Reminders Dropdowns */}
         <div className="flex space-x-4">
-          {/* Date Dropdown */}
-          <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key="1">
-                    <DatePicker
-                        placeholder="Select date"
-                        onChange={(date) => setTaskDate(date)} // Handle date selection
-                        className="w-full"
-                    />
-                  </Menu.Item>
-                </Menu>
+          {/* Date Picker Popover */}
+          <Popover
+              content={
+                <DatePicker
+                    placeholder="Select date"
+                    onChange={(date) => {
+                      setTaskDate(date);
+                      setDatePopoverVisible(false); // Close popover after selecting date
+                    }}
+                    className="w-full"
+                />
               }
-              trigger={["click"]} // Open dropdown on click
+              trigger="click"
+              visible={datePopoverVisible}
+              onVisibleChange={setDatePopoverVisible}
           >
             <div
                 aria-label="Set date"
                 role="button"
                 tabIndex={0}
                 className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                onClick={() => setDatePopoverVisible(true)}
             >
-              {/* Calendar Icon */}
-              <FaCalendar className="text-gray-500" /> {/* Calendar icon from react-icons */}
-              {/* Date Text */}
-              <span className="text-sm text-gray-600">Date</span>
+              <FaCalendar className="text-gray-500" />
+              <span className="text-sm text-gray-600">
+            {taskDate ? taskDate.format("YYYY-MM-DD") : "Date"}
+          </span>
             </div>
-          </Dropdown>
+          </Popover>
 
           {/* Priority Dropdown */}
           <Dropdown
@@ -149,23 +153,14 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
                   <Menu.Item key="4">Priority 4</Menu.Item>
                 </Menu>
               }
-              trigger={["click"]} // Open dropdown on click
+              trigger={["click"]}
           >
             <div
-                data-priority="4"
-                aria-label="Set priority"
-                aria-owns="dropdown-select-132-popup"
-                aria-controls="dropdown-select-132-popup"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                data-action-hint="task-actions-priority-picker"
                 role="button"
                 tabIndex={0}
                 className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
             >
-              {/* Priority Icon */}
-              <IoFlagOutline className="text-gray-500" /> {/* Flag icon from react-icons */}
-              {/* Priority Text */}
+              <IoFlagOutline className="text-gray-500" />
               <span className="text-sm text-gray-600">Priority</span>
             </div>
           </Dropdown>
@@ -179,17 +174,14 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
                   <Menu.Item key="3">Add reminder</Menu.Item>
                 </Menu>
               }
-              trigger={["click"]} // Open dropdown on click
+              trigger={["click"]}
           >
             <div
-                aria-label="Set reminders"
                 role="button"
                 tabIndex={0}
                 className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
             >
-              {/* Reminders Icon */}
-              <LuAlarmClock className="text-gray-500" /> {/* Bell icon from react-icons */}
-              {/* Reminders Text */}
+              <LuAlarmClock className="text-gray-500" />
               <span className="text-sm text-gray-600">Reminders</span>
             </div>
           </Dropdown>
