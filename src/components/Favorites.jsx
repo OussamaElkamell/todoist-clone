@@ -62,7 +62,8 @@ const Favorites = () => {
               className="text-gray-600 text-[15px] p-1 hover:bg-gray-200 rounded-sm"
               onClick={() => setFavoritesVisible(!favoritesVisible)}
             >
-              {favoritesVisible ? <FaChevronDown /> : <FaChevronRight />}
+
+              {favoritesVisible ? <FaChevronDown style={{color:"grey"}} /> : <FaChevronRight style={{color:"grey", fontWeight:"normal"}}/>}
             </span>
           </div>
 

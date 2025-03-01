@@ -16,10 +16,11 @@ dayjs.extend(localizedFormat);
 const { Option, OptGroup } = Select;
 
 const CompletedTasks = () => {
-    const { projects, tasksCompleted } = useProjects();
+    const { projects, tasksCompleted ,inbox} = useProjects();
     const [selectedProject, setSelectedProject] = useState("all");
     const [searchValue, setSearchValue] = useState("");
-
+    console.log("selected",selectedProject  )
+    console.log("tasksCompleted",projects)
     // Filter projects based on search input
     const filteredProjects = projects.filter((project) =>
         project.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -28,14 +29,14 @@ const CompletedTasks = () => {
     // Filter tasks based on selected project
     const filteredTasks = selectedProject === "all"
         ? tasksCompleted
-        : selectedProject === "Inbox"
-            ? tasksCompleted.filter(task => !task.project_id)
-            : tasksCompleted.filter(task => task.project_id === selectedProject);
+        : selectedProject === "inbox"
+            ? tasksCompleted.filter(task => task.project_id === inbox.id) // Filter tasks for the inbox
+            : tasksCompleted.filter(task => task.project_id === selectedProject); // Filter tasks by project_id
 
     // Attach project names and parse completion times
     const tasksWithProjects = filteredTasks.map(task => ({
         ...task,
-        project: projects.find(p => p.id === task.project_id) || { name: "Inbox" },
+        project: projects.find(p => p.id === task.project_id) || { name: "Inbox" }, // Default to "Inbox" if no project_id
         completedAt: task.completed_at ? dayjs(task.completed_at) : null // Ensure valid parsing
     }));
 
@@ -65,13 +66,20 @@ const CompletedTasks = () => {
         <div className="p-5 pl-60 font-sans flex flex-col justify-center items-center h-screen w-full">
             <div className="w-[45%] absolute top-20">
                 {/* Filter Dropdown */}
-                <div className="mb-4 flex flex-row items-center gap-2">
+                <div className="custom-select mb-4 flex flex-row items-center gap-2">
                     <h1 className="text-3xl font-bold">Activity:</h1>
+                    <style>
+                        {`
+        .custom-select .ant-select-selection-item {
+            font-size: 30px !important;
+            font-weight:bold
+        }
+    `}
+                    </style>
                     <Select
                         value={selectedProject}
                         onChange={setSelectedProject}
                         style={{
-                            fontSize: "30px",
                             minWidth: "220px",
                             border: "none",
                             outline: "none",
@@ -153,12 +161,12 @@ const CompletedTasks = () => {
                                                                 width: "10px",
                                                                 height: "10px",
                                                                 borderRadius: "50%",
-                                                                backgroundColor: "#e0f7e9", // Light green background
+                                                                backgroundColor: "#3C9B0D", // Light green background
                                                                 display: "flex",
                                                                 alignItems: "center",
                                                                 justifyContent: "center"
                                                             }}>
-                                                                <MdDone style={{ color: "green", fontSize: "24px" }} />
+                                                                <MdDone style={{ color: "white", fontSize: "24px"  }} />
                                                             </div>
 
                                                             {/* Task Details */}
@@ -166,6 +174,7 @@ const CompletedTasks = () => {
                                                                 <p className="text-[16px]">
                                                                     <span style={{ fontWeight: 600 }}>You </span>
                                                                     completed a task: {task.content}
+                                                                    
                                                                 </p>
                                                                 {task.description && (
                                                                     <p className="text-[13px] text-gray-600">{task.description}</p>

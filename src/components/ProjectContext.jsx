@@ -34,7 +34,7 @@ const [tasksCompleted,setTasksCompleted]=useState([])
   const projects = allProjects.filter(
     (project) => project.name !== "Inbox"
   );
-
+    console.log("inbox",inbox)
   const addProject = (newProject) => {
     setAllProjects((prevProjects) => [...prevProjects, newProject]);
   };
