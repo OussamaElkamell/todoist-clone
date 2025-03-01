@@ -1,0 +1,14 @@
+/* index.css or any other global stylesheet */
+.ant-drawer-content-wrapper,
+.ant-drawer-content {
+  box-shadow: none !important; /* Ensure no shadow */
+  transition: none;
+}
+
+
+input[type="checkbox"]:hover {
+  background-image: url('<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000"><path d="M400-301 240-461l51-51 109 109 269-269 51 51-320 320Z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px 12px; /* Adjust the size of the tick */
+}
