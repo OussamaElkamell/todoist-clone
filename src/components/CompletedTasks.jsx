@@ -63,46 +63,31 @@ const CompletedTasks = () => {
     });
 
     return (
-        <div className="p-5 pl-60 font-sans flex flex-col justify-center items-center h-screen w-full">
-            <div className="w-[45%] absolute top-20">
+        <div className="p-5 md:pl-60 font-sans flex flex-col justify-center items-center min-h-screen w-full">
+            <div className="md:w-[45%] w-full absolute top-20 px-4">
                 {/* Filter Dropdown */}
-                <div className="custom-select mb-4 flex flex-row items-center gap-2">
-                    <h1 className="text-3xl font-bold">Activity:</h1>
+                <div className="custom-select mb-4 flex flex-row flex-wrap items-center gap-2">
+                    <h1 className="text-2xl md:text-3xl font-bold">Activity:</h1>
                     <style>
                         {`
-        .custom-select .ant-select-selection-item {
-            font-size: 30px !important;
-            font-weight:bold
-        }
-    `}
+          .custom-select .ant-select-selection-item {
+            font-size: 24px !important;
+            font-weight: bold;
+          }
+        `}
                     </style>
                     <Select
                         value={selectedProject}
                         onChange={setSelectedProject}
                         style={{
-                            minWidth: "220px",
+                            minWidth: "180px",
                             border: "none",
                             outline: "none",
                             fontWeight: "bold",
                         }}
                         dropdownStyle={{ borderRadius: "8px" }}
                         optionLabelProp="label"
-                        dropdownRender={(menu) => (
-                            <div>
-                                {/* Search Input Inside Dropdown */}
-                                <div className="p-2">
-                                    <Input
-                                        placeholder="Type a project name"
-                                        prefix={<SearchOutlined />}
-                                        value={searchValue}
-                                        onChange={(e) => setSearchValue(e.target.value)}
-                                        allowClear
-                                    />
-                                </div>
-                                {menu}
-                            </div>
-                        )}
-                        bordered={false} // Removes the default border
+                        bordered={false}
                     >
                         <Option value="all" label="All Projects"># All Projects</Option>
                         <Option value="inbox" label="Inbox">
@@ -128,9 +113,8 @@ const CompletedTasks = () => {
                             <div ref={provided.innerRef} {...provided.droppableProps}>
                                 {Object.entries(groupedTasks).map(([dateKey, tasks]) => (
                                     <div key={dateKey} className="mb-4">
-                                        {/* Section Header with Date Formatting */}
-                                        <h2 className="text-2x6 font-bold mb-2 mt-8 mt-15 text-black">{dateKey}</h2>
-
+                                        {/* Section Header */}
+                                        <h2 className="text-xl md:text-2xl font-bold mb-2 mt-8 text-black">{dateKey}</h2>
                                         <ul className="list-none p-0">
                                             {tasks.map((task, index) => (
                                                 <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
@@ -139,52 +123,32 @@ const CompletedTasks = () => {
                                                             ref={provided.innerRef}
                                                             {...provided.draggableProps}
                                                             {...provided.dragHandleProps}
-                                                            className={`flex items-center p-4 px-0 text-[16px] border-b border-gray-300 cursor-pointer group 
-                                                        ${snapshot.isDragging ? "bg-gray-200 shadow-lg" : ""}`}
+                                                            className={`flex items-center p-3 md:p-4 border-b border-gray-300 cursor-pointer group 
+                            ${snapshot.isDragging ? "bg-gray-200 shadow-lg" : ""}`}
                                                         >
                                                             {/* User Avatar */}
-                                                            <Avatar
-                                                                style={{
-                                                                    backgroundColor: "#fde3cf",
-                                                                    color: "#f56a00",
-                                                                    width: "40px",
-                                                                    height: "40px",
-                                                                    fontSize: "20px"
-                                                                }}
-                                                            >
+                                                            <Avatar className="w-10 h-10 text-xl bg-orange-100 text-orange-600">
                                                                 {task.user ? task.user.charAt(0).toUpperCase() : "U"}
                                                             </Avatar>
-                                                            <div style={{
-                                                                position: "absolute",
-                                                                marginLeft:"30px",
-                                                                marginTop:"20px",
-                                                                width: "10px",
-                                                                height: "10px",
-                                                                borderRadius: "50%",
-                                                                backgroundColor: "#3C9B0D", // Light green background
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                justifyContent: "center"
-                                                            }}>
-                                                                <MdDone style={{ color: "white", fontSize: "24px"  }} />
+
+                                                            {/* Status Indicator */}
+                                                            <div className="absolute ml-8 mt-5 w-3 h-3 rounded-full bg-green-500 flex items-center justify-center">
+                                                                <MdDone className="text-white text-xl" />
                                                             </div>
 
                                                             {/* Task Details */}
                                                             <div className="flex flex-col flex-grow ml-3">
-                                                                <p className="text-[16px]">
-                                                                    <span style={{ fontWeight: 600 }}>You </span>
+                                                                <p className="text-sm md:text-base">
+                                                                    <span className="font-semibold">You </span>
                                                                     completed a task: {task.content}
-                                                                    
                                                                 </p>
                                                                 {task.description && (
-                                                                    <p className="text-[13px] text-gray-600">{task.description}</p>
+                                                                    <p className="text-xs md:text-sm text-gray-600">{task.description}</p>
                                                                 )}
                                                             </div>
 
                                                             {/* Project Name */}
-                                                            <span style={{ fontSize: "12px", color: "grey" }}>
-                                                                {task.project.name} #
-                                                            </span>
+                                                            <span className="text-xs text-gray-500">{task.project.name} #</span>
                                                         </li>
                                                     )}
                                                 </Draggable>
@@ -199,6 +163,7 @@ const CompletedTasks = () => {
                 </DragDropContext>
             </div>
         </div>
+
     );
 };
 
