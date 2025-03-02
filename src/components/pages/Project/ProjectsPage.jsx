@@ -1,13 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { colorOptions } from "../ColorOptions";
-import AddProjectModal from "./CreateProjectModal";
+import { colorOptions } from "../../../context/ColorOptions";
+import AddProjectModal from "../../Layout/CreateProjectModal";
 import MoreOptions from "./MoreOptions";
 import { Link } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
+import {PlusOutlined, SearchOutlined} from "@ant-design/icons";
 import { Input } from "antd";
 
-import { useProjects } from "./ProjectContext";
+import { useProjects } from "../../../context/ProjectContext";
 
 const ProjectsPage = () => {
   const {
@@ -69,12 +69,12 @@ const ProjectsPage = () => {
     <>
       <div className="flex items-center justify-center h-screen">
         <div className="p-6 rounded-lg w-[50%] absolute top-20">
-          <h1 className="text-2xl font-bold mb-4">My Projects</h1>
+          <h1 className="mb-4 text-2xl font-bold">My Projects</h1>
           <div className="relative mb-2 ">
             <Input
               type="text"
               placeholder="Search projects"
-              className="border rounded px-3 py-2 w-full"
+              className="w-full px-3 py-2 border rounded"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on Input change
               prefix={<SearchOutlined />}
@@ -84,13 +84,16 @@ const ProjectsPage = () => {
           {/* Add button */}
           <div className="flex justify-end mb-2 ">
             <button
-              className="text-[25px] font-normal px-2 rounded-[50%] hover:bg-gray-200"
-              onClick={() => setProjectsModalVisible(true)}
+                className="text-[14px] font-bold  rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
+                onClick={() => setProjectsModalVisible(true)}
+                aria-label="Add Project"
             >
-              +
+              <PlusOutlined />
             </button>
+
+
           </div>
-       
+
           {/* AddProjectModal Component */}
           <AddProjectModal
             open={projectsmodalVisible}
@@ -105,7 +108,7 @@ const ProjectsPage = () => {
             setSelectedColor={setSelectedColor}
           />
 
-          <p className="text-gray-700 font-medium mb-2 ">
+          <p className="mb-2 font-medium text-gray-700 ">
             {filteredProjects.length} projects
           </p>
           <hr />
@@ -119,11 +122,12 @@ const ProjectsPage = () => {
                   // setSelectedProjectId(project.id);
                   (e) => e.stopPropagation();
                 }}
-                className="group p-2 rounded cursor-pointer flex items-center justify-between gap-2 hover:bg-gray-200"
+                className="flex items-center justify-between gap-2 p-2 rounded cursor-pointer group hover:bg-gray-200"
               >
-                <div 
+                <div
                   className="w-full"
-                  onClick={() => setSelectedProjectId(project.id)}>
+                  onClick={() => setSelectedProjectId(project.id)}
+                >
                   <Link to={`/my-projects/${project.name}`}>
                     <div className="flex items-center">
                       <span

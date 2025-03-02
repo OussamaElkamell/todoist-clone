@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 
-import AddProjectModal from "./CreateProjectModal";
-import { colorOptions } from "../ColorOptions";
+import AddProjectModal from "../../Layout/CreateProjectModal";
+import { colorOptions } from "../../../context/ColorOptions";
 import MoreOptions from "./MoreOptions";
 import { Link } from "react-router-dom";
 
-import { useProjects } from "./ProjectContext";
+import { useProjects } from "../../../context/ProjectContext";
 
 const Projects = () => {
   const {
@@ -25,7 +25,7 @@ const Projects = () => {
     editingProject,
     setEditingProject,
   } = useProjects();
-
+  console.log("selectedProject",selectedProjectId)
   const [projectsVisible, setProjectsVisible] = useState(true);
 
   const getHashtagColor = (project) => {
@@ -57,16 +57,16 @@ const Projects = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between cursor-pointer hover:bg-gray-200 rounded-sm mb-2">
+      <div className="flex items-center justify-between mb-2 rounded-sm cursor-pointer hover:bg-gray-200">
         {/* Use Link for navigation */}
         <Link
           to="/"
-          className="text-gray-500 font-semibold text-sm hover:text-gray-700"
+          className="text-sm font-semibold text-gray-500 hover:text-gray-700"
         >
           My Projects
         </Link>
 
-        <div className="flex gap-2 text-gray-600 items-center">
+        <div className="flex items-center gap-2 text-gray-600">
           <span
             className="text-gray-500 text-[22px] px-2 hover:text-gray-600"
             onClick={() => setProjectsModalVisible(true)}
@@ -109,11 +109,10 @@ const Projects = () => {
                   : "hover:bg-gray-200"
               }`}
             >
-              
-              <div 
+              <div
                 className="w-full"
                 onClick={() => setSelectedProjectId(project.id)}
-                >
+              >
                 <Link to={`/my-projects/${project.name}`}>
                   <div className="flex items-center">
                     <span
@@ -122,7 +121,7 @@ const Projects = () => {
                     >
                       #
                     </span>
-                    <span style={{fontSize:"14px"}}>{project.name}</span>
+                    <span style={{ fontSize: "14px" }}>{project.name}</span>
                   </div>
                 </Link>
               </div>

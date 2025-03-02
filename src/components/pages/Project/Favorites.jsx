@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
-import AddProjectModal from "./CreateProjectModal";
-import { colorOptions } from "../ColorOptions";
+import AddProjectModal from "../../Layout/CreateProjectModal";
+import { colorOptions } from "../../../context/ColorOptions";
 import MoreOptions from "./MoreOptions";
-import { useProjects } from "./ProjectContext";
+import { useProjects } from "../../../context/ProjectContext";
 import { Link } from "react-router-dom";
 
 const Favorites = () => {
@@ -56,14 +56,19 @@ const Favorites = () => {
     <div className="mb-4">
       {favorites.length > 0 && (
         <>
-          <div className="flex items-center justify-between cursor-pointer mb-2">
-            <h2 className="text-gray-500 text-sm font-semibold">Favorites</h2>
+          <div className="flex items-center justify-between mb-2 cursor-pointer">
+            <h2 className="text-sm font-semibold text-gray-500">Favorites</h2>
             <span
               className="text-gray-600 text-[15px] p-1 hover:bg-gray-200 rounded-sm"
               onClick={() => setFavoritesVisible(!favoritesVisible)}
             >
-
-              {favoritesVisible ? <FaChevronDown style={{color:"grey"}} /> : <FaChevronRight style={{color:"grey", fontWeight:"normal"}}/>}
+              {favoritesVisible ? (
+                <FaChevronDown style={{ color: "grey" }} />
+              ) : (
+                <FaChevronRight
+                  style={{ color: "grey", fontWeight: "normal" }}
+                />
+              )}
             </span>
           </div>
 
@@ -107,7 +112,7 @@ const Favorites = () => {
                         >
                           #
                         </span>
-                        <span style={{fontSize:"14px"}}>{project.name}</span>
+                        <span style={{ fontSize: "14px" }}>{project.name}</span>
                       </div>
                     </Link>
                   </div>

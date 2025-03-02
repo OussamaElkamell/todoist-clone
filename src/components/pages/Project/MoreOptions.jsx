@@ -7,7 +7,7 @@ import {
   EllipsisOutlined,
 } from "@ant-design/icons";
 
-import { useProjects } from "./ProjectContext";
+import { useProjects } from "../../../context/ProjectContext";
 
 const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
   const { api } = useProjects();
@@ -30,7 +30,7 @@ const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
         ...project,
         isFavorite: !project.isFavorite, // Toggle the favorite status
       };
-      await api.updateProject(project.id,updatedProject)
+      await api.updateProject(project.id, updatedProject);
 
       // Use the updateProject function passed from Projects component
       updateProject(updatedProject);
@@ -42,13 +42,13 @@ const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
   const menu = (
     <Menu>
       <Menu.Item key="edit" onClick={() => onEdit(project)}>
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <EditOutlined />
           <span>Edit</span>
         </div>
       </Menu.Item>
       <Menu.Item key="favorites" onClick={() => handleFavoriteProject(project)}>
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <HeartOutlined style={{ fill: "black" }} />
           <span>
             {project.isFavorite ? "Remove from Favourites" : "Add to Favourite"}
@@ -56,7 +56,7 @@ const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
         </div>
       </Menu.Item>
       <Menu.Item key="delete" onClick={() => handleDeleteProject(project.id)}>
-        <div className="flex gap-3 items-center text-red-600">
+        <div className="flex items-center gap-3 text-red-600">
           <DeleteOutlined />
           <span>Delete</span>
         </div>

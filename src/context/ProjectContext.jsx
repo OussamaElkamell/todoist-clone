@@ -1,12 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { useParams } from "react-router-dom";
+import apis from "../../services/api"; // Import Axios instance
+import { API_CONFIG } from "../../config/apiConfig"; // Import config
 
 const ProjectContext = createContext();
 
 export const useProjects = () => useContext(ProjectContext);
 
-const api = new TodoistApi("37f0d3accd797ea4b340abddc1b9e05b45ca753a");
+const api = new TodoistApi(API_CONFIG.TODOIST_API_KEY);
 
 export const ProjectProvider = ({ children }) => {
   const [allProjects, setAllProjects] = useState([]);
@@ -73,9 +75,7 @@ export const ProjectProvider = ({ children }) => {
 
   const getCompletedTasks = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/completed-tasks");
-      if (!response.ok) throw new Error("Failed to fetch tasks");
-      const data = await response.json();
+      const { data } = await apis.get(API_CONFIG.COMPLETED_TASKS_URL);
       setTasksCompleted(data.items || []);
     } catch (error) {
       console.error("Error fetching completed tasks:", error);
@@ -85,6 +85,7 @@ export const ProjectProvider = ({ children }) => {
   useEffect(() => {
     getCompletedTasks();
   }, []);
+
   return (
     <ProjectContext.Provider
       value={{

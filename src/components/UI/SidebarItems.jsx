@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Favorites from "./Favorites";
-import Projects from "./Projects";
-import AddTaskModal from "./AddTaskModal";
-import { useProjects } from "./ProjectContext";
+import Favorites from "../pages/Project/Favorites";
+import Projects from "../pages/Project/Projects";
+import AddTaskModal from "../Layout/AddTaskModal";
+import { useProjects } from "../../context/ProjectContext";
 import { IoIosAddCircle } from "react-icons/io";
 import { Avatar } from "antd";
 import { InboxOutlined, CheckCircleOutlined } from "@ant-design/icons";

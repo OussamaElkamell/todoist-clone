@@ -1,20 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { useProjects } from "./ProjectContext";
-import { DatePicker, Dropdown, Menu, Button ,Select} from "antd";
+import { useProjects } from "../../../context/ProjectContext";
+import { DatePicker, Dropdown, Menu, Button, Select ,message} from "antd";
 import { FaCalendar, FaFlag, FaBell } from "react-icons/fa";
-import {IoFlagOutline} from "react-icons/io5";
-import {LuAlarmClock} from "react-icons/lu";
-const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialData, taskBeingEdited }) => {
-  const { allProjects, projects, inbox, selectedProjectId ,setTasks} = useProjects();
+import { IoFlagOutline } from "react-icons/io5";
+import { LuAlarmClock } from "react-icons/lu";
+const CreateTask = ({
+  onAddTask,
+  onUpdateTask,
+  onDeleteTask,
+  onCancel,
+  initialData,
+  taskBeingEdited,
+}) => {
+  const { allProjects, projects, inbox, selectedProjectId, setTasks } =
+    useProjects();
 
-  console.log("taskBeingEdited:",taskBeingEdited);
+  console.log("taskBeingEdited:", taskBeingEdited);
 
   const [taskContent, setTaskContent] = useState(initialData?.content || "");
-  const [taskDescription, setTaskDescription] = useState(initialData?.description || "");
-  const [projectId, setProjectId] = useState(
-    initialData?.projectId || selectedProjectId || inbox?.id || (projects[0] && projects[0].id) || null
+  const [taskDescription, setTaskDescription] = useState(
+    initialData?.description || ""
   );
-
+  const [projectId, setProjectId] = useState(
+    initialData?.projectId ||
+      selectedProjectId ||
+      inbox?.id ||
+      (projects[0] && projects[0].id) ||
+      null
+  );
+  const [loading, setLoading] = useState(false);
   console.log("Project ID State:", projectId);
 
   useEffect(() => {
@@ -23,11 +37,15 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
     }
   }, [initialData]);
 
+
+
   const handleAddorUpdateTask = async () => {
     if (!taskContent) {
-      alert("Task content cannot be empty!");
+      message.error("Task content cannot be empty!"); // Error message
       return;
     }
+
+    setLoading(true);
     try {
       let updatedTask = null;
 
@@ -50,6 +68,7 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
               description: taskDescription,
               projectId,
             });
+            message.success("Task successfully updated !"); // Success message
           }
         } else {
           console.warn("Task being edited has no ID, treating as new task.");
@@ -66,20 +85,23 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
           description: taskDescription,
           projectId,
         });
+        message.success("Task successfully created !");
       }
 
       // Ensure the state is updated with the new task
       if (updatedTask) {
-        // Assuming onAddTask or onUpdateTask returns the new task object
         console.log("Updated Task:", updatedTask);
+
       }
 
       // Reset fields and close modal
       onCancel();
       setTaskContent("");
       setTaskDescription("");
+      setLoading(false);
     } catch (error) {
       console.error("Error handling task:", error);
+      message.error("An error occurred while processing your task. Please try again."); // Error message
     }
   };
 
@@ -90,14 +112,14 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
   };
 
   return (
-      <div className="add-task-container w-full p-4 mt-4 border-2 border-gray-300 rounded-md shadow-sm bg-white">
+      <div className="w-full p-4 mt-4 bg-white border-2 border-gray-300 rounded-md shadow-sm add-task-container">
         {/* Task Name Input */}
         <input
             type="text"
             placeholder="Task name"
             value={taskContent}
             onChange={(e) => setTaskContent(e.target.value)}
-            className="w-full font-bold rounded-md focus:outline-none focus:ring-0 mb-2"
+            className="w-full mb-2 font-bold rounded-md focus:outline-none focus:ring-0"
         />
 
         {/* Description Textarea */}
@@ -105,12 +127,11 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
             placeholder="Description"
             value={taskDescription}
             onChange={(e) => setTaskDescription(e.target.value)}
-            className="w-full text-sm text-gray-600 rounded-md focus:outline-none focus:ring-0 resize-none"
+            className="w-full text-sm text-gray-600 rounded-md resize-none focus:outline-none focus:ring-0"
             rows={2}
         />
 
-        {/* Date, Priority, and Reminders Dropdowns */}
-        <div className="flex space-x-4">
+        <div className="flex space-x-2">
           {/* Date Dropdown */}
           <Dropdown
               overlay={
@@ -118,24 +139,22 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
                   <Menu.Item key="1">
                     <DatePicker
                         placeholder="Select date"
-                        onChange={(date) => setTaskDate(date)} // Handle date selection
-                        className="w-full"
+                        onChange={(date) => setTaskDate(date)}
+                        className="w-full text-xs"
                     />
                   </Menu.Item>
                 </Menu>
               }
-              trigger={["click"]} // Open dropdown on click
+              trigger={["click"]}
           >
             <div
                 aria-label="Set date"
                 role="button"
                 tabIndex={0}
-                className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                className="flex items-center p-1 space-x-1 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
             >
-              {/* Calendar Icon */}
-              <FaCalendar className="text-gray-500" /> {/* Calendar icon from react-icons */}
-              {/* Date Text */}
-              <span className="text-sm text-gray-600">Date</span>
+              <FaCalendar className="text-gray-500 text-[12px]" />
+              <span className="text-xs text-gray-600">Date</span>
             </div>
           </Dropdown>
 
@@ -149,24 +168,17 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
                   <Menu.Item key="4">Priority 4</Menu.Item>
                 </Menu>
               }
-              trigger={["click"]} // Open dropdown on click
+              trigger={["click"]}
           >
             <div
                 data-priority="4"
                 aria-label="Set priority"
-                aria-owns="dropdown-select-132-popup"
-                aria-controls="dropdown-select-132-popup"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                data-action-hint="task-actions-priority-picker"
                 role="button"
                 tabIndex={0}
-                className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                className="flex items-center p-1 space-x-1 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
             >
-              {/* Priority Icon */}
-              <IoFlagOutline className="text-gray-500" /> {/* Flag icon from react-icons */}
-              {/* Priority Text */}
-              <span className="text-sm text-gray-600">Priority</span>
+              <IoFlagOutline className="text-gray-500 text-[12px]" />
+              <span className="text-xs text-gray-600">Priority</span>
             </div>
           </Dropdown>
 
@@ -179,18 +191,16 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
                   <Menu.Item key="3">Add reminder</Menu.Item>
                 </Menu>
               }
-              trigger={["click"]} // Open dropdown on click
+              trigger={["click"]}
           >
             <div
                 aria-label="Set reminders"
                 role="button"
                 tabIndex={0}
-                className="flex items-center space-x-2 cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                className="flex items-center p-1 space-x-1 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
             >
-              {/* Reminders Icon */}
-              <LuAlarmClock className="text-gray-500" /> {/* Bell icon from react-icons */}
-              {/* Reminders Text */}
-              <span className="text-sm text-gray-600">Reminders</span>
+              <LuAlarmClock className="text-gray-500 text-[12px]" />
+              <span className="text-xs text-gray-600">Reminders</span>
             </div>
           </Dropdown>
         </div>
@@ -199,7 +209,7 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
         <hr className="my-3 border-gray-200" />
 
         {/* Bottom Section: Project Select and Buttons */}
-        <div className="mt-2 w-full flex justify-between items-center">
+        <div className="flex items-center justify-between w-full mt-2">
           {/* Project Select Dropdown */}
           <Select
               key="project-select"
@@ -207,7 +217,7 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
               onChange={handleProjectChange}
               style={{ width: "30%" }}
               placeholder="Select a project"
-              className="text-sm"
+              className="text-sm border-0 focus:ring-0"
           >
             {allProjects.map((project) => (
                 <Select.Option key={project.id} value={project.id}>
@@ -220,19 +230,28 @@ const CreateTask = ({ onAddTask, onUpdateTask, onDeleteTask, onCancel, initialDa
           <div className="flex space-x-2">
             <Button
                 onClick={onCancel}
-                className="bg-gray-100 text-gray-700 px-4 py-1 rounded-md hover:!bg-gray-200 transition-colors"
+                className="bg-gray-100 text-gray-700 px-4 py-1 rounded-md hover:bg-gray-200 transition-colors"
             >
               Cancel
             </Button>
             <Button
+                key="submit"
+                type="primary"
+                loading={loading}
                 onClick={handleAddorUpdateTask}
-                className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors"
+                disabled={!taskContent} // Disable if no content
+                style={{ width: 100  }}
+                className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors disabled:bg-[#B03A30] disabled:text-black disabled:cursor-not-allowed"
             >
-              {taskBeingEdited === undefined ? "Add Task" : "Save"}
+              Add Task
             </Button>
+
+
+
           </div>
         </div>
       </div>
+
   );
 };
 

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Select } from "antd";
-import { colorOptions } from "../ColorOptions"; // Importing color options
+import { colorOptions } from "../../../context/ColorOptions";
 
-const ProjectColors = ({selectedColor, setSelectedColor}) => {
-    console.log(selectedColor)
-    
+const ProjectColors = ({ selectedColor, setSelectedColor }) => {
+  console.log(selectedColor);
+
   return (
     <div className="mt-4">
       <label className="font-semibold">Color</label>
@@ -15,7 +15,11 @@ const ProjectColors = ({selectedColor, setSelectedColor}) => {
         optionLabelProp="label"
       >
         {colorOptions.map((color) => (
-          <Select.Option key={color.value} value={color.value} label={color.label}>
+          <Select.Option
+            key={color.value}
+            value={color.value}
+            label={color.label}
+          >
             <div style={{ display: "flex", alignItems: "center" }}>
               <div
                 style={{

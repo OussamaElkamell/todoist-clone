@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Input, Button, Switch, Select } from "antd";
-import ColorSelect from "./ProjectColors";
-import { useProjects } from "./ProjectContext";
+import ColorSelect from "../pages/Project/ProjectColors";
+import { useProjects } from "../../context/ProjectContext";
 
 const CreateProjectModal = ({
   open,
@@ -63,26 +63,24 @@ const CreateProjectModal = ({
   return (
     <Modal
       title={editingProject ? "Edit Project" : "Add Project"}
-      
       open={open}
       onCancel={onClose}
       footer={[
-        <Button 
-        className="font-semibold !bg-[#f5f5f5] !hover:bg-[#f5f5f5]"
-        key="back" 
-        onClick={onClose}
-      >
-        Cancel
-      </Button>,
-      <Button
-        className="!bg-[#DC4C3E] !hover:bg-[#B03A30] !text-white font-semibold"
-        key="submit"
-        type="primary"
-        onClick={handleAddOrUpdateProject}
-      >
-        {editingProject ? "Update Project" : "Add Project"}
-      </Button>
-      
+        <Button
+          className="font-semibold !bg-[#f5f5f5] !hover:bg-[#f5f5f5]"
+          key="back"
+          onClick={onClose}
+        >
+          Cancel
+        </Button>,
+        <Button
+          className="!bg-[#DC4C3E] !hover:bg-[#B03A30] !text-white font-semibold"
+          key="submit"
+          type="primary"
+          onClick={handleAddOrUpdateProject}
+        >
+          {editingProject ? "Update Project" : "Add Project"}
+        </Button>,
       ]}
     >
       <hr></hr>
