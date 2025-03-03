@@ -5,7 +5,7 @@ import Sidebar from "../src/components/UI/Sidebar.jsx";
 import MyProjectsPage from "./components/pages/Project/ProjectsPage.jsx";
 import SingleProjectPage from "./components/pages/Tasks/OneProjectPage.jsx";
 import { ProjectProvider } from "./context/ProjectContext.jsx";
-import CompletedTasks from "./components/pages/Tasks/CompletedTasks.jsx";
+
 
 const App = () => {
   return (
@@ -19,7 +19,7 @@ const App = () => {
               path="/my-projects/:projectName"
               element={<SingleProjectPage />}
             />
-            <Route path="/completed" element={<CompletedTasks />} />
+
           </Routes>
         </div>
       </Router>

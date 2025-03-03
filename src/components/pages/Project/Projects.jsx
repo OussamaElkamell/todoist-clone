@@ -7,6 +7,7 @@ import MoreOptions from "./MoreOptions";
 import { Link } from "react-router-dom";
 
 import { useProjects } from "../../../context/ProjectContext";
+import {message} from "antd";
 
 const Projects = () => {
   const {
@@ -25,7 +26,7 @@ const Projects = () => {
     editingProject,
     setEditingProject,
   } = useProjects();
-  console.log("selectedProject",selectedProjectId)
+
   const [projectsVisible, setProjectsVisible] = useState(true);
 
   const getHashtagColor = (project) => {
@@ -44,6 +45,7 @@ const Projects = () => {
   };
 
   const handleProjectUpdated = (updatedProject) => {
+    message.success("project updated successfully !")
     updateProject(updatedProject); // Use context to update the project
   };
 
@@ -52,6 +54,7 @@ const Projects = () => {
   };
 
   const handleProjectDeleted = (projectId) => {
+    message.success("project deleted successfully !")
     deleteProject(projectId); // Use context to delete the project
   };
 

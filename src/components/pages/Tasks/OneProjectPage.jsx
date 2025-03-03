@@ -214,6 +214,7 @@ const OneProjectPage = () => {
   return (
       <div className="font-sans flex flex-col justify-center items-center min-h-screen w-full p-4">
         <div className="w-full max-w-[90%] md:max-w-[60%] lg:max-w-[45%] absolute top-20">
+
           {isEditing ? (
               <input
                   className="text-lg sm:text-xl md:text-2xl font-bold p-2 sm:p-3 w-full border border-gray-300 rounded"
@@ -336,6 +337,7 @@ const OneProjectPage = () => {
           </div>
         </div>
       </div>
+
 
   );
 };

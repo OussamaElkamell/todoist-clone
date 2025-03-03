@@ -34,12 +34,13 @@ export const ProjectProvider = ({ children }) => {
   const inbox = allProjects.find((project) => project.name === "Inbox");
   const favorites = allProjects.filter((project) => project.isFavorite);
   const projects = allProjects.filter((project) => project.name !== "Inbox");
-  console.log("inbox", inbox);
+
   const addProject = (newProject) => {
     setAllProjects((prevProjects) => [...prevProjects, newProject]);
   };
 
   const deleteProject = (projectId) => {
+
     setAllProjects((prevProjects) =>
       prevProjects.filter((project) => project.id !== projectId)
     );
@@ -73,18 +74,7 @@ export const ProjectProvider = ({ children }) => {
       .catch((error) => console.error("Error closing task:", error));
   };
 
-  const getCompletedTasks = async () => {
-    try {
-      const { data } = await apis.get(API_CONFIG.COMPLETED_TASKS_URL);
-      setTasksCompleted(data.items || []);
-    } catch (error) {
-      console.error("Error fetching completed tasks:", error);
-    }
-  };
 
-  useEffect(() => {
-    getCompletedTasks();
-  }, []);
 
   return (
     <ProjectContext.Provider

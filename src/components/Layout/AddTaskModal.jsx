@@ -69,9 +69,10 @@ const AddTaskModal = ({ open, onClose }) => {
   return (
       <Modal
           open={open}
-
           onCancel={handleCancel}
           mask={false}
+
+
           footer={
             <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
               <Select
@@ -87,7 +88,9 @@ const AddTaskModal = ({ open, onClose }) => {
                     </Select.Option>
                 ))}
               </Select>
+              <hr/>
               <div>
+
                 <Button className="bg-gray-100 text-gray-700 px-4 py-1 rounded-md hover:!bg-gray-200 transition-colors" key="back" onClick={handleCancel} style={{ width: 100 }}>
                   Cancel
                 </Button>
@@ -98,7 +101,7 @@ const AddTaskModal = ({ open, onClose }) => {
                     onClick={handleOk}
                     disabled={!taskContent} // Disable if no content
                     style={{ width: 100 ,margin:"5px" }}
-                    className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors disabled:bg-[#B03A30] disabled:text-black disabled:cursor-not-allowed"
+                    className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors disabled:bg-[#eda59e] disabled:text-white disabled:cursor-not-allowed"
                 >
                   Add Task
                 </Button>
@@ -106,15 +109,28 @@ const AddTaskModal = ({ open, onClose }) => {
             </div>
           }
       >
-        <hr />
-        <div className="w-full ">
+
+        <div className="w-full " >
           <input
               type="text"
               value={taskContent}
               onChange={handleContentChange}
               placeholder="Task name"
-              className="w-full text-[18px] placeholder:font-semibold placeholder:text-gray-400 focus:outline-none focus:ring-0"
+              className="w-full text-[20px] focus:outline-none focus:ring-0"
+              style={{
+                color: "#202020", // Text color
+                backgroundColor: "rgba(0, 0, 0, 0)", // Transparent background
+                fontFamily:
+                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple Color Emoji', Helvetica, Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol'", // Font stack
+                fontWeight: 600, // Semi-bold
+                fontStyle: "normal",
+                textDecoration: "none solid rgb(32, 32, 32)",
+                textTransform: "none",
+                fontKerning: "auto",
+                fontSize: "20px", // Font size
+              }}
           />
+
         </div>
         <div className="">
           <input
@@ -122,8 +138,23 @@ const AddTaskModal = ({ open, onClose }) => {
               value={taskDescription}
               onChange={handleDescriptionChange}
               placeholder="Description"
-              className="w-full mb-2 placeholder:font-normal text-[12px] placeholder:text-gray-400 focus:outline-none focus:ring-0"
+              className="w-full mb-2 focus:outline-none focus:ring-0"
+              style={{
+                color: "rgba(0, 0, 0, 0.88)", // Text color
+                backgroundColor: "#FFFFFF", // Background color (white)
+                fontFamily:
+                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'", // Font stack
+                fontSize: "12px", // Font size
+                fontWeight: 400, // Normal font weight
+                fontStyle: "normal",
+                textDecoration: "none solid rgba(0, 0, 0, 0.88)", // Text decoration
+                textTransform: "none",
+                fontKerning: "auto",
+                fontVariationSettings: "normal",
+                fontFeatureSettings: "normal",
+              }}
           />
+
           {/* Date, Priority, and Reminders Dropdowns */}
           <div className="flex space-x-2">
             {/* Date Dropdown */}

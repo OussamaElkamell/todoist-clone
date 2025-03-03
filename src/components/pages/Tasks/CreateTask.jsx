@@ -241,7 +241,7 @@ const CreateTask = ({
                 onClick={handleAddorUpdateTask}
                 disabled={!taskContent} // Disable if no content
                 style={{ width: 100  }}
-                className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors disabled:bg-[#B03A30] disabled:text-black disabled:cursor-not-allowed"
+                className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors disabled:bg-[#eda59e] disabled:text-white disabled:cursor-not-allowed"
             >
               Add Task
             </Button>
