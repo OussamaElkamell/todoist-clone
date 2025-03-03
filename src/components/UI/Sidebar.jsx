@@ -49,7 +49,7 @@ const Sidebar = () => {
           left: isDrawerOpen ? `${drawerWidth - 40}px` : "10px",
           zIndex: 3000,
           width: "30px",
-          transition: "left 0.3s ease", // Smooth transition for position change
+          transition: "left 0.3s ease",
         }}
       />
 
@@ -63,7 +63,7 @@ const Sidebar = () => {
         destroyOnClose={true}
         width={drawerWidth}
         style={{
-          backgroundColor: "#fcfaf8", // Set background color
+          backgroundColor: "#fcfaf8",
         }}
       >
         <div className="mt-10">

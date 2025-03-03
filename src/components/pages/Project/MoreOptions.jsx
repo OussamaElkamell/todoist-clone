@@ -12,7 +12,7 @@ import { useProjects } from "../../../context/ProjectContext";
 const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
   const { api } = useProjects();
 
-  // Delete Project
+
   const handleDeleteProject = async (projectId) => {
     try {
       await api.deleteProject(projectId);
@@ -23,16 +23,16 @@ const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
     }
   };
 
-  // Handle favorite project toggle
+
   const handleFavoriteProject = async (project) => {
     try {
       const updatedProject = {
         ...project,
-        isFavorite: !project.isFavorite, // Toggle the favorite status
+        isFavorite: !project.isFavorite,
       };
       await api.updateProject(project.id, updatedProject);
 
-      // Use the updateProject function passed from Projects component
+
       updateProject(updatedProject);
     } catch (error) {
       console.error("Error Updating project:", error);
@@ -68,7 +68,7 @@ const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
     <Dropdown overlay={menu} trigger={["click"]} placement="topLeft">
       <span
         className="text-gray-500 cursor-pointer hover:text-black text-[18px]"
-        onClick={(e) => e.stopPropagation()} // Prevent parent click
+        onClick={(e) => e.stopPropagation()}
       >
         <EllipsisOutlined />
       </span>

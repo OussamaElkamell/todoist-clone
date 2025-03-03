@@ -24,12 +24,12 @@ const ProjectsPage = () => {
     setEditingProject,
   } = useProjects();
 
-  // State to track the search query
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [hoveredProjectId, setHoveredProjectId] = useState(null); // State to track the hovered project
+  const [hoveredProjectId, setHoveredProjectId] = useState(null);
 
   useEffect(() => {
-    // Reset selectedProjectId when MyProjectsPage is loaded
+
     setSelectedProjectId(null);
   }, [setSelectedProjectId]);
 
@@ -38,7 +38,7 @@ const ProjectsPage = () => {
     return color ? color.color : "#36454F";
   };
 
-  // Filter the projects based on the search query
+
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -49,20 +49,21 @@ const ProjectsPage = () => {
   };
 
   const handleEditProject = (project) => {
-    setEditingProject(project); // The project to be edited
-    setProjectsModalVisible(true); // Open the modal
+    setEditingProject(project);
+    setProjectsModalVisible(true);
   };
 
   const handleProjectUpdated = (updatedProject) => {
-    updateProject(updatedProject); // Use context to update the project
+    updateProject(updatedProject);
   };
 
   const handleProjectAdded = (newProject) => {
-    addProject(newProject); // Use context to add the project
+    addProject(newProject);
+
   };
 
   const handleProjectDeleted = (projectId) => {
-    deleteProject(projectId); // Use context to delete the project
+    deleteProject(projectId);
   };
 
   return (
@@ -76,7 +77,7 @@ const ProjectsPage = () => {
               placeholder="Search projects"
               className="w-full px-3 py-2 border rounded"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on Input change
+              onChange={(e) => setSearchQuery(e.target.value)}
               prefix={<SearchOutlined />}
             />
           </div>
@@ -119,7 +120,7 @@ const ProjectsPage = () => {
                 onMouseEnter={() => setHoveredProjectId(project.id)}
                 onMouseLeave={() => setHoveredProjectId(null)}
                 onClick={(e) => {
-                  // setSelectedProjectId(project.id);
+
                   (e) => e.stopPropagation();
                 }}
                 className="flex items-center justify-between gap-2 p-2 rounded cursor-pointer group hover:bg-gray-200"
@@ -146,7 +147,7 @@ const ProjectsPage = () => {
                   <MoreOptions
                     project={project}
                     onEdit={handleEditProject}
-                    onDelete={handleProjectDeleted} // Pass delete handler
+                    onDelete={handleProjectDeleted}
                     updateProject={handleProjectUpdated}
                   />
                 )}

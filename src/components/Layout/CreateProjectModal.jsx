@@ -17,7 +17,7 @@ const CreateProjectModal = ({
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedView, setSelectedView] = useState("list");
   const [loading,setLoading]=useState(false)
-  // Reset the modal internal state when it becomes visible
+
   useEffect(() => {
     if (open) {
       if (editingProject) {
@@ -42,7 +42,7 @@ const CreateProjectModal = ({
     };
 
     if (editingProject) {
-      // Update project
+
       api
         .updateProject(editingProject.id, projectData)
         .then((updatedProject) => {
@@ -51,7 +51,7 @@ const CreateProjectModal = ({
         })
         .catch((error) => console.error("Error updating project:", error));
     } else {
-      // Add project
+
       api
         .addProject(projectData)
         .then((newProject) => {
@@ -83,7 +83,7 @@ const CreateProjectModal = ({
                   className="font-semibold !bg-[#f5f5f5] !hover:bg-[#e0e0e0]"
                   key="back"
                   onClick={onClose}
-                  disabled={loading} // Disable cancel button while loading
+                  disabled={loading}
               >
                 Cancel
               </Button>,
@@ -95,7 +95,7 @@ const CreateProjectModal = ({
                   type="primary"
                   onClick={handleAddOrUpdateProject}
                   disabled={!projectName || loading}
-                  loading={loading} // Show loading indicator
+                  loading={loading}
               >
                 {editingProject ? "Update Project" : "Add Project"}
               </Button>,

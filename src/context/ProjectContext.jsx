@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { useParams } from "react-router-dom";
-import apis from "../../services/api"; // Import Axios instance
-import { API_CONFIG } from "../../config/apiConfig"; // Import config
+import apis from "../../services/api";
+import { API_CONFIG } from "../../config/apiConfig";
 
 const ProjectContext = createContext();
 
@@ -30,7 +30,7 @@ export const ProjectProvider = ({ children }) => {
       .catch((error) => console.error("Error fetching projects:", error));
   }, []);
 
-  // Segregation logic
+
   const inbox = allProjects.find((project) => project.name === "Inbox");
   const favorites = allProjects.filter((project) => project.isFavorite);
   const projects = allProjects.filter((project) => project.name !== "Inbox");

@@ -41,7 +41,7 @@ const CreateTask = ({
 
   const handleAddorUpdateTask = async () => {
     if (!taskContent) {
-      message.error("Task content cannot be empty!"); // Error message
+      message.error("Task content cannot be empty!");
       return;
     }
 
@@ -52,23 +52,23 @@ const CreateTask = ({
       if (taskBeingEdited) {
         if (initialData?.id) {
           if (initialData.projectId !== projectId) {
-            // Delete from old project
+
             await onDeleteTask(initialData.id, initialData.projectId);
-            // Add new task in the new project
+
             updatedTask = await onAddTask({
               content: taskContent,
               description: taskDescription,
               projectId,
             });
           } else {
-            // Update task in the same project
+
             updatedTask = await onUpdateTask({
               ...initialData,
               content: taskContent,
               description: taskDescription,
               projectId,
             });
-            message.success("Task successfully updated !"); // Success message
+            message.success("Task successfully updated !");
           }
         } else {
           console.warn("Task being edited has no ID, treating as new task.");
@@ -79,7 +79,7 @@ const CreateTask = ({
           });
         }
       } else {
-        // Creating a new task
+
         updatedTask = await onAddTask({
           content: taskContent,
           description: taskDescription,
@@ -88,20 +88,20 @@ const CreateTask = ({
         message.success("Task successfully created !");
       }
 
-      // Ensure the state is updated with the new task
+
       if (updatedTask) {
         console.log("Updated Task:", updatedTask);
 
       }
 
-      // Reset fields and close modal
+
       onCancel();
       setTaskContent("");
       setTaskDescription("");
       setLoading(false);
     } catch (error) {
       console.error("Error handling task:", error);
-      message.error("An error occurred while processing your task. Please try again."); // Error message
+      message.error("An error occurred while processing your task. Please try again.");
     }
   };
 
@@ -239,7 +239,7 @@ const CreateTask = ({
                 type="primary"
                 loading={loading}
                 onClick={handleAddorUpdateTask}
-                disabled={!taskContent} // Disable if no content
+                disabled={!taskContent}
                 style={{ width: 100  }}
                 className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors disabled:bg-[#eda59e] disabled:text-white disabled:cursor-not-allowed"
             >

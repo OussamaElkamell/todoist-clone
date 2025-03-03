@@ -29,9 +29,9 @@ const OneProjectPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProjectName, setEditedProjectName] = useState(projectName);
 
-  const [isAddTaskVisible, setIsAddTaskVisible] = useState(false); // State to control AddTask visibility
+  const [isAddTaskVisible, setIsAddTaskVisible] = useState(false);
 
-  const [taskBeingEdited, setTaskBeingEdited] = useState(null); // Track the task being edited
+  const [taskBeingEdited, setTaskBeingEdited] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const OneProjectPage = () => {
       const allTasks = await api.getTasks();
 
       if (selectedProjectId === "inbox") {
-        setTasks(allTasks); // Show all tasks when Inbox is selected
+        setTasks(allTasks);
       } else {
         const filteredTasks = allTasks.filter(
             (task) => task.projectId === selectedProjectId
@@ -68,7 +68,7 @@ const OneProjectPage = () => {
         (project) => project.name === projectName
     );
     if (matchedProject) {
-      setSelectedProjectId(matchedProject.id); // Set the projectId in state
+      setSelectedProjectId(matchedProject.id);
     }
   }, [allProjects, projectName]);
 
@@ -80,10 +80,10 @@ const OneProjectPage = () => {
     setIsEditing(false);
     if (editedProjectName !== projectName) {
       try {
-        // Update project name in the API
+
         await api.updateProject(selectedProjectId, { name: editedProjectName });
 
-        // Find and update the project in the local state
+
         const updatedProject = allProjects.find(
             (project) => project.id === selectedProjectId
         );
@@ -102,7 +102,7 @@ const OneProjectPage = () => {
       if (selectedProjectId === newTask.projectId) {
         setTasks((prevTasks) => [...prevTasks, addedTask]);
       }
-      setIsAddTaskVisible(false); // Hide the AddTask component after adding the task
+      setIsAddTaskVisible(false);
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -111,14 +111,15 @@ const OneProjectPage = () => {
     try {
       await closeTask(taskId);
 
-      // Update the completed tasks state
+
+
       setTasksCompleted((prevTasks) =>
           prevTasks.map((task) =>
               task.id === taskId ? { ...task, isCompleted: true } : task
           )
       );
 
-      // Also update the main task list (setTasks)
+
       setTasks((prevTasks) =>
           prevTasks.map((task) =>
               task.id === taskId ? { ...task, isCompleted: true } : task
@@ -137,9 +138,9 @@ const OneProjectPage = () => {
     try {
       await api.deleteTask(taskId);
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-      message.success("Task successfully deleted !"); // Success message
+      message.success("Task successfully deleted !");
     } catch (error) {
-      message.success("Cannot delete task !"); // Success message
+      message.success("Cannot delete task !");
       console.error("Error deleting task:", error);
     }
   };
@@ -149,23 +150,23 @@ const OneProjectPage = () => {
       const response = await api.updateTask(updatedTask.id, updatedTask);
       console.log("updatedTaskId", updatedTask.projectId);
 
-      console.log("API Response:", response); // Debugging
+      console.log("API Response:", response);
 
-      // Update the task in the state locally without refetching
+
       setTasks((prevTasks) => {
         return prevTasks.map((task) =>
             task.id === updatedTask.id
                 ? {
                   ...task,
                   projectId: updatedTask.projectId,
-                  content: updatedTask.content,    // Update content
-                  description: updatedTask.description, // Update description
+                  content: updatedTask.content,
+                  description: updatedTask.description,
                 }
                 : task
         );
       });
 
-      setTaskBeingEdited(null); // Close the task being edited
+      setTaskBeingEdited(null);
     } catch (error) {
       console.error("Error updating task:", error);
     }
@@ -174,35 +175,35 @@ const OneProjectPage = () => {
 
 
 
-  // Handle task reordering
+
   const handleDragEnd = async (result) => {
-    if (!result.destination) return; // If dropped outside, do nothing
+    if (!result.destination) return;
 
     const { source, destination } = result;
 
-    // Find the source and destination project IDs
+
     const sourceProjectId = source.droppableId;
     const destinationProjectId = destination.droppableId;
 
-    // If the task is moved within the same project, reorder it
+
     if (sourceProjectId === destinationProjectId) {
       const reorderedTasks = [...tasks];
       const [movedTask] = reorderedTasks.splice(source.index, 1);
       reorderedTasks.splice(destination.index, 0, movedTask);
       setTasks(reorderedTasks);
     } else {
-      // Task is moved to a different project
+
       const movedTask = tasks.find((task) => task.id === result.draggableId);
 
       if (movedTask) {
         try {
-          // Update the task in the backend with the new projectId
+
           await api.updateTask(movedTask.id, { ...movedTask, projectId: destinationProjectId });
 
-          // Remove task from the source project and add it to the destination project
+
           setTasks((prevTasks) => prevTasks.filter((task) => task.id !== movedTask.id));
 
-          // Fetch the updated task list for both projects
+
           fetchTasks();
         } catch (error) {
           console.error("Error updating task project:", error);

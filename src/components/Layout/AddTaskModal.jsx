@@ -22,7 +22,7 @@ const AddTaskModal = ({ open, onClose }) => {
   }, [selectedProjectId]);
 
   const handleOk = () => {
-    if (!taskContent) return; // Prevent adding task if content is empty
+    if (!taskContent) return;
 
     setLoading(true);
     api
@@ -99,7 +99,7 @@ const AddTaskModal = ({ open, onClose }) => {
                     type="primary"
                     loading={loading}
                     onClick={handleOk}
-                    disabled={!taskContent} // Disable if no content
+                    disabled={!taskContent}
                     style={{ width: 100 ,margin:"5px" }}
                     className="bg-[#DC4C3E] text-white px-4 py-1 rounded-md hover:!bg-[#B03A30] transition-colors disabled:bg-[#eda59e] disabled:text-white disabled:cursor-not-allowed"
                 >
@@ -118,16 +118,16 @@ const AddTaskModal = ({ open, onClose }) => {
               placeholder="Task name"
               className="w-full text-[20px] focus:outline-none focus:ring-0"
               style={{
-                color: "#202020", // Text color
-                backgroundColor: "rgba(0, 0, 0, 0)", // Transparent background
+                color: "#202020",
+                backgroundColor: "rgba(0, 0, 0, 0)",
                 fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple Color Emoji', Helvetica, Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol'", // Font stack
-                fontWeight: 600, // Semi-bold
+                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple Color Emoji', Helvetica, Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol'",
+                fontWeight: 600,
                 fontStyle: "normal",
                 textDecoration: "none solid rgb(32, 32, 32)",
                 textTransform: "none",
                 fontKerning: "auto",
-                fontSize: "20px", // Font size
+                fontSize: "20px",
               }}
           />
 
@@ -140,14 +140,14 @@ const AddTaskModal = ({ open, onClose }) => {
               placeholder="Description"
               className="w-full mb-2 focus:outline-none focus:ring-0"
               style={{
-                color: "rgba(0, 0, 0, 0.88)", // Text color
-                backgroundColor: "#FFFFFF", // Background color (white)
+                color: "rgba(0, 0, 0, 0.88)",
+                backgroundColor: "#FFFFFF",
                 fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'", // Font stack
-                fontSize: "12px", // Font size
-                fontWeight: 400, // Normal font weight
+                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+                fontSize: "12px",
+                fontWeight: 400,
                 fontStyle: "normal",
-                textDecoration: "none solid rgba(0, 0, 0, 0.88)", // Text decoration
+                textDecoration: "none solid rgba(0, 0, 0, 0.88)",
                 textTransform: "none",
                 fontKerning: "auto",
                 fontVariationSettings: "normal",
@@ -155,7 +155,7 @@ const AddTaskModal = ({ open, onClose }) => {
               }}
           />
 
-          {/* Date, Priority, and Reminders Dropdowns */}
+
           <div className="flex space-x-2">
             {/* Date Dropdown */}
             <Dropdown

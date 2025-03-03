@@ -37,19 +37,19 @@ const Favorites = () => {
 
   const handleEditProject = (project) => {
     setEditingProject(project);
-    setProjectsModalVisible(true); // Open the modal
+    setProjectsModalVisible(true);
   };
 
   const handleProjectUpdated = (updatedProject) => {
-    updateProject(updatedProject); // Use context to update the project
+    updateProject(updatedProject);
   };
 
   const handleProjectAdded = (newProject) => {
-    addProject(newProject); // Use context to add the project
+    addProject(newProject);
   };
 
   const handleProjectDeleted = (projectId) => {
-    deleteProject(projectId); // Use context to delete the project
+    deleteProject(projectId);
   };
 
   return (
@@ -80,7 +80,7 @@ const Favorites = () => {
             }}
             onProjectAdded={handleProjectAdded}
             onProjectUpdated={handleProjectUpdated}
-            editingProject={editingProject} // Pass project to be edited
+            editingProject={editingProject}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
           />
@@ -123,8 +123,8 @@ const Favorites = () => {
                       <div className="group-hover:opacity-100">
                         <MoreOptions
                           project={project}
-                          onEdit={handleEditProject} // Pass edit handler
-                          onDelete={handleProjectDeleted} // Pass delete handler
+                          onEdit={handleEditProject}
+                          onDelete={handleProjectDeleted}
                           updateProject={handleProjectUpdated}
                         />
                       </div>

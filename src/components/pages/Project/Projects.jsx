@@ -41,27 +41,27 @@ const Projects = () => {
 
   const handleEditProject = (project) => {
     setEditingProject(project);
-    setProjectsModalVisible(true); // Open the modal
+    setProjectsModalVisible(true);
   };
 
   const handleProjectUpdated = (updatedProject) => {
     message.success("project updated successfully !")
-    updateProject(updatedProject); // Use context to update the project
+    updateProject(updatedProject);
   };
 
   const handleProjectAdded = (newProject) => {
-    addProject(newProject); // Use context to add the project
+    addProject(newProject);
   };
 
   const handleProjectDeleted = (projectId) => {
     message.success("project deleted successfully !")
-    deleteProject(projectId); // Use context to delete the project
+    deleteProject(projectId);
   };
 
   return (
     <div>
       <div className="flex items-center justify-between mb-2 rounded-sm cursor-pointer hover:bg-gray-200">
-        {/* Use Link for navigation */}
+
         <Link
           to="/"
           className="text-sm font-semibold text-gray-500 hover:text-gray-700"
@@ -93,12 +93,12 @@ const Projects = () => {
         }}
         onProjectAdded={handleProjectAdded}
         onProjectUpdated={handleProjectUpdated}
-        editingProject={editingProject} // Pass project to be edited
+        editingProject={editingProject}
         selectedColor={selectedColor}
         setSelectedColor={setSelectedColor}
       />
 
-      {/* Projects Section */}
+
       {projectsVisible && (
         <ul>
           {projects.map((project) => (
@@ -135,8 +135,8 @@ const Projects = () => {
                   <div className="group-hover:opacity-100">
                     <MoreOptions
                       project={project}
-                      onEdit={handleEditProject} // Pass edit handler
-                      onDelete={handleProjectDeleted} // Pass delete handler
+                      onEdit={handleEditProject}
+                      onDelete={handleProjectDeleted}
                       updateProject={handleProjectUpdated}
                     />
                   </div>
