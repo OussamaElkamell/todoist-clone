@@ -34,10 +34,10 @@ const SidebarItems = () => {
         </Avatar>
         <span
           style={{
-            fontSize: "17px",
+            fontSize: "13px",
             color: "#333",
             fontFamily: "system-ui, sans-serif",
-            fontWeight: "bold",
+            fontWeight: "600",
           }}
         >
           Himalaya
@@ -78,7 +78,10 @@ const SidebarItems = () => {
                         : "text-gray-600"
                     }`}
                   />
-                  <span className="text-sm font-normal">{inbox.name}</span>
+                 <span className="inbox-text">{inbox.name}</span>
+
+
+
                 </div>
               </li>
             </ul>

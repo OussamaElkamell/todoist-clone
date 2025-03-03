@@ -213,8 +213,8 @@ const OneProjectPage = () => {
   };
 
   return (
-      <div className="font-sans flex flex-col justify-center items-center min-h-screen w-full p-4">
-        <div className="w-full max-w-[90%] md:max-w-[60%] lg:max-w-[45%] absolute top-20">
+      <div className="font-sans flex flex-col justify-center items-center min-h-screen w-full p-2 ">
+        <div className="w-full max-w-[100%] md:max-w-[60%] lg:max-w-[45%] absolute top-12 ml-4">
 
           {isEditing ? (
               <input
@@ -226,7 +226,7 @@ const OneProjectPage = () => {
               />
           ) : (
               <h1
-                  className="text-lg sm:text-xl md:text-2xl font-bold p-2 sm:p-3 hover:cursor-pointer hover:border"
+                  className=" text-lg sm:text-[24px] md:text-2xl font-bold p-2 sm:p-3 hover:cursor-pointer hover:border"
                   onClick={() => setIsEditing(true)}
               >
                 {editedProjectName}
@@ -248,7 +248,7 @@ const OneProjectPage = () => {
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
                                       className={`flex flex-col md:flex-row items-start md:items-center p-3 text-sm sm:text-base border-b border-gray-300 cursor-pointer group ${
-                                          snapshot.isDragging ? "bg-gray-200 shadow-lg" : ""
+                                          snapshot.isDragging ? "bg-gray-100 shadow-sm" : ""
                                       }`}
                                   >
                                     {taskBeingEdited?.id === task.id ? (
@@ -279,7 +279,7 @@ const OneProjectPage = () => {
 
                                           <div className="flex flex-col flex-grow ml-3">
                                             <p className="text-base">{task.content}</p>
-                                            <p className="text-sm text-gray-600">{task.description}</p>
+                                            <p className="custom-paragraph text-sm text-gray-600 ">{task.description}</p>
                                           </div>
 
                                           <div className="flex items-center space-x-2">
@@ -320,7 +320,7 @@ const OneProjectPage = () => {
                   ) : (
                       <IoIosAdd size={30} className="text-red-500" />
                   )}
-                  <b className="text-gray-500">Add task</b>
+                  <b className="text-gray-500 text-[14px] font-normal">Add task</b>
                 </div>
             )}
 

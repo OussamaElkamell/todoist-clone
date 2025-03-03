@@ -69,20 +69,29 @@ const Projects = () => {
           My Projects
         </Link>
 
-        <div className="flex items-center gap-2 text-gray-600">
+        <div className="flex items-center space-x-1 text-gray-600 group">
+          {/* "+" Button - Now hidden by default */}
           <span
-            className="text-gray-500 text-[22px] px-2 hover:text-gray-600"
-            onClick={() => setProjectsModalVisible(true)}
+              className="text-gray-500 text-[22px] hover:text-gray-600 flex items-center justify-center mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              onClick={() => setProjectsModalVisible(true)}
           >
-            +
-          </span>
+    +
+  </span>
+
+          {/* Chevron Button - Hidden by default */}
           <span
-            className="text-gray-500 text-[15px] p-1 hover:text-gray-600"
-            onClick={() => setProjectsVisible(!projectsVisible)}
+              className="text-gray-500 text-[15px] p-1 hover:text-gray-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              onClick={() => setProjectsVisible(!projectsVisible)}
           >
-            {projectsVisible ? <FaChevronDown /> : <FaChevronRight />}
-          </span>
+    {projectsVisible ? (
+        <FaChevronDown style={{ color: "grey", fontSize: "12px" }} />
+    ) : (
+        <FaChevronRight style={{ color: "grey", fontSize: "12px" }} />
+    )}
+  </span>
         </div>
+
+
       </div>
 
       <AddProjectModal
@@ -116,7 +125,7 @@ const Projects = () => {
                 className="w-full"
                 onClick={() => setSelectedProjectId(project.id)}
               >
-                <Link to={`/my-projects/${project.name}`}>
+                <Link className={"inbox-text"} to={`/my-projects/${project.name}`}>
                   <div className="flex items-center">
                     <span
                       className="text-[18px] font-semibold mr-2"

@@ -12,3 +12,36 @@ input[type="checkbox"]:hover {
   background-position: center;
   background-size: 12px 12px; /* Adjust the size of the tick */
 }
+.inbox-text {
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, Noto, "Oxygen-Sans", Ubuntu, Cantrell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  text-align: left;
+  text-transform: none;
+  text-decoration: none solid rgb(32, 32, 32);
+  font-kerning: auto;
+  font-optical-sizing: auto;
+  font-stretch: 100%;
+  font-variation-settings: normal;
+  font-feature-settings: normal;
+}
+.custom-paragraph {
+
+  font-size: 12px;
+  font-weight: 400;
+  color: #666666;
+  background-color: rgba(0, 0, 0, 0);
+  text-align: left;
+  text-transform: none;
+  text-decoration: none solid rgb(102, 102, 102);
+  font-kerning: auto;
+  font-optical-sizing: auto;
+  font-stretch: 100%;
+  font-variation-settings: normal;
+  font-feature-settings: normal;
+}
+
+body {
+  fontFamily:"-apple-system, system-ui, 'Segoe UI', Roboto, Noto, 'Oxygen-Sans', Ubuntu, Cantrell, 'Helvetica Neue', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+}

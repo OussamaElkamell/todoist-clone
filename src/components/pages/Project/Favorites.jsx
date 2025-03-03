@@ -58,18 +58,19 @@ const Favorites = () => {
         <>
           <div className="flex items-center justify-between mb-2 cursor-pointer">
             <h2 className="text-sm font-semibold text-gray-500">Favorites</h2>
-            <span
-              className="text-gray-600 text-[15px] p-1 hover:bg-gray-200 rounded-sm"
-              onClick={() => setFavoritesVisible(!favoritesVisible)}
-            >
-              {favoritesVisible ? (
-                <FaChevronDown style={{ color: "grey" }} />
-              ) : (
-                <FaChevronRight
-                  style={{ color: "grey", fontWeight: "normal" }}
-                />
-              )}
-            </span>
+            <div className="flex items-center space-x-1 text-gray-600 group">
+  <span
+      className="text-gray-600 text-[15px] p-1 hover:bg-gray-200 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+      onClick={() => setFavoritesVisible(!favoritesVisible)}
+  >
+    {favoritesVisible ? (
+        <FaChevronDown style={{ color: "grey", fontSize: "12px" }} />
+    ) : (
+        <FaChevronRight style={{ color: "grey", fontSize: "12px" }} />
+    )}
+  </span>
+            </div>
+
           </div>
 
           <AddProjectModal
@@ -104,11 +105,11 @@ const Favorites = () => {
                     className="w-full"
                     onClick={() => setSelectedProjectId(project.id)}
                   >
-                    <Link to={`/my-projects/${project.name}`}>
+                    <Link className={"inbox-text"} to={`/my-projects/${project.name}`}>
                       <div className="flex items-center">
                         <span
                           className="text-[18px] font-semibold mr-2"
-                          style={{ color: getHashtagColor(project) }}
+                          style={{ color: getHashtagColor(project)  }}
                         >
                           #
                         </span>

@@ -48,8 +48,10 @@ const Sidebar = () => {
           top: "10px",
           left: isDrawerOpen ? `${drawerWidth - 40}px` : "10px",
           zIndex: 3000,
-          width: "30px",
+          width: "22px",
           transition: "left 0.3s ease",
+            color:"gray",
+
         }}
       />
 
