@@ -15,13 +15,16 @@ const OneProjectPage = () => {
     api,
     allProjects,
     updateProject,
+    deleteTask,
     setSelectedProjectId,
     selectedProjectId,
     tasks,
     setTasks,
     setTasksCompleted,
     tasksCompleted,
-    closeTask
+    closeTask,
+      addTask,
+      updateTask
   } = useProjects();
 
   const { projectName } = useParams();
@@ -98,15 +101,14 @@ const OneProjectPage = () => {
 
   const handleAddTask = async (newTask) => {
     try {
-      const addedTask = await api.addTask(newTask);
-      if (selectedProjectId === newTask.projectId) {
-        setTasks((prevTasks) => [...prevTasks, addedTask]);
-      }
-      setIsAddTaskVisible(false);
+      const addedTask = await addTask(newTask);
+      return addedTask;
     } catch (error) {
       console.error("Error adding task:", error);
+      throw error;
     }
   };
+
   const handleCloseTask = async (taskId) => {
     try {
       await closeTask(taskId);
@@ -126,7 +128,7 @@ const OneProjectPage = () => {
           )
       );
 
-      console.log(`Task ${taskId} closed successfully.`);
+
     } catch (error) {
       console.error(`Failed to close task ${taskId}:`, error.message || error);
     }
@@ -136,7 +138,7 @@ const OneProjectPage = () => {
 
   const handleDeleteTask = async (taskId) => {
     try {
-      await api.deleteTask(taskId);
+      await deleteTask(taskId);
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
       message.success("Task successfully deleted !");
     } catch (error) {
@@ -146,11 +148,15 @@ const OneProjectPage = () => {
   };
 
   const handleUpdateTask = async (updatedTask) => {
-    try {
-      const response = await api.updateTask(updatedTask.id, updatedTask);
-      console.log("updatedTaskId", updatedTask.projectId);
 
-      console.log("API Response:", response);
+
+    if (!updatedTask || !updatedTask.id) {
+      console.error("Task ID is missing!");
+      return;
+    }
+
+    try {
+      const response = await updateTask(updatedTask.id, updatedTask);
 
 
       setTasks((prevTasks) => {
@@ -158,7 +164,7 @@ const OneProjectPage = () => {
             task.id === updatedTask.id
                 ? {
                   ...task,
-                  projectId: updatedTask.projectId,
+                  projectId: updatedTask.project_id,
                   content: updatedTask.content,
                   description: updatedTask.description,
                 }
@@ -171,6 +177,7 @@ const OneProjectPage = () => {
       console.error("Error updating task:", error);
     }
   };
+
 
 
 

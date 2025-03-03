@@ -10,13 +10,13 @@ import {
 import { useProjects } from "../../../context/ProjectContext";
 
 const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
-  const { api } = useProjects();
+  const { api ,deleteProject } = useProjects();
 
 
   const handleDeleteProject = async (projectId) => {
     try {
-      await api.deleteProject(projectId);
-      console.log(`Project with ID ${projectId} deleted successfully.`);
+      await deleteProject(projectId);
+
       onDelete(projectId);
     } catch (error) {
       console.error("Error deleting project:", error);
@@ -26,18 +26,24 @@ const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
 
   const handleFavoriteProject = async (project) => {
     try {
+      if (!project?.id) {
+        console.error("Project ID is undefined");
+        return;
+      }
+
       const updatedProject = {
         ...project,
-        isFavorite: !project.isFavorite,
+        is_favorite: !project.is_favorite,
       };
-      await api.updateProject(project.id, updatedProject);
 
-
-      updateProject(updatedProject);
+      await updateProject(updatedProject);
     } catch (error) {
       console.error("Error Updating project:", error);
     }
   };
+
+
+
 
   const menu = (
     <Menu>
@@ -51,8 +57,10 @@ const MoreOptions = ({ project, onEdit, onDelete, updateProject }) => {
         <div className="flex items-center gap-3">
           <HeartOutlined style={{ fill: "black" }} />
           <span>
-            {project.isFavorite ? "Remove from Favourites" : "Add to Favourite"}
-          </span>
+    {project.is_favorite? "Remove from Favourites" : "Add to Favourite"}
+</span>
+
+
         </div>
       </Menu.Item>
       <Menu.Item key="delete" onClick={() => handleDeleteProject(project.id)}>

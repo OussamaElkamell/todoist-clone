@@ -15,7 +15,7 @@ const CreateTask = ({
   const { allProjects, projects, inbox, selectedProjectId, setTasks } =
     useProjects();
 
-  console.log("taskBeingEdited:", taskBeingEdited);
+
 
   const [taskContent, setTaskContent] = useState(initialData?.content || "");
   const [taskDescription, setTaskDescription] = useState(
@@ -29,7 +29,7 @@ const CreateTask = ({
       null
   );
   const [loading, setLoading] = useState(false);
-  console.log("Project ID State:", projectId);
+
 
   useEffect(() => {
     if (initialData?.projectId) {
@@ -51,49 +51,43 @@ const CreateTask = ({
 
       if (taskBeingEdited) {
         if (initialData?.id) {
-          if (initialData.projectId !== projectId) {
-
+          if (initialData.project_id !== projectId) {
             await onDeleteTask(initialData.id, initialData.projectId);
 
             updatedTask = await onAddTask({
               content: taskContent,
               description: taskDescription,
-              projectId,
+              project_id:projectId,
             });
           } else {
-
             updatedTask = await onUpdateTask({
               ...initialData,
               content: taskContent,
               description: taskDescription,
-              projectId,
+              project_id:projectId,
             });
-            message.success("Task successfully updated !");
+            message.success("Task successfully updated!");
           }
         } else {
           console.warn("Task being edited has no ID, treating as new task.");
           updatedTask = await onAddTask({
             content: taskContent,
             description: taskDescription,
-            projectId,
+            project_id:projectId,
           });
         }
       } else {
-
         updatedTask = await onAddTask({
           content: taskContent,
           description: taskDescription,
-          projectId,
+          project_id:projectId,
         });
-        message.success("Task successfully created !");
+        message.success("Task successfully created!");
       }
-
 
       if (updatedTask) {
-        console.log("Updated Task:", updatedTask);
 
       }
-
 
       onCancel();
       setTaskContent("");
@@ -106,8 +100,8 @@ const CreateTask = ({
   };
 
 
+
   const handleProjectChange = (value) => {
-    console.log("Selected Project ID:", value);
     setProjectId(value);
   };
 

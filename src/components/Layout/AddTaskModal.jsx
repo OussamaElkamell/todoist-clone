@@ -6,7 +6,7 @@ import {IoFlagOutline} from "react-icons/io5";
 import {LuAlarmClock} from "react-icons/lu";
 
 const AddTaskModal = ({ open, onClose }) => {
-  const { api, allProjects, projects, inbox, selectedProjectId, setTasks } =
+  const { api, allProjects, projects, inbox, selectedProjectId, setTasks,addTask  } =
       useProjects();
 
   const [loading, setLoading] = useState(false);
@@ -25,17 +25,14 @@ const AddTaskModal = ({ open, onClose }) => {
     if (!taskContent) return;
 
     setLoading(true);
-    api
-        .addTask({
+    addTask({
           content: taskContent,
           description: taskDescription,
-          projectId: projectId,
+        project_id:projectId,
         })
-        .then((task) => {
+        .then(() => {
           setLoading(false);
-          if (selectedProjectId === task.projectId) {
-            setTasks((prevTasks) => [...prevTasks, task]);
-          }
+
           onClose();
           setTaskContent("");
           setTaskDescription("");

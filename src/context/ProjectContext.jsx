@@ -21,62 +21,122 @@ export const ProjectProvider = ({ children }) => {
 
   const [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
-    api
-      .getProjects()
-      .then((fetchedProjects) => {
-        setAllProjects(fetchedProjects);
-      })
-      .catch((error) => console.error("Error fetching projects:", error));
-  }, []);
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const response = await apis.get("/projects");
+                setAllProjects(response.data);
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            }
+        };
+
+        fetchProjects();
+    }, []);
 
 
   const inbox = allProjects.find((project) => project.name === "Inbox");
-  const favorites = allProjects.filter((project) => project.isFavorite);
+  const favorites = allProjects.filter((project) => project.is_favorite);
   const projects = allProjects.filter((project) => project.name !== "Inbox");
 
-  const addProject = (newProject) => {
-    setAllProjects((prevProjects) => [...prevProjects, newProject]);
-  };
-
-  const deleteProject = (projectId) => {
-
-    setAllProjects((prevProjects) =>
-      prevProjects.filter((project) => project.id !== projectId)
-    );
-  };
-
-  const updateProject = (updatedProject) => {
-    setAllProjects((prevProjects) =>
-      prevProjects.map((project) =>
-        project.id === updatedProject.id ? updatedProject : project
-      )
-    );
-  };
-  const deleteTask = (taskId) => {
-    api
-      .deleteTask(taskId)
-      .then(() => {
-        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-      })
-      .catch((error) => console.error("Error deleting task:", error));
-  };
-  const closeTask = (taskId) => {
-    api
-      .closeTask(taskId)
-      .then(() => {
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.id === taskId ? { ...task, isCompleted: true } : task
-          )
-        );
-      })
-      .catch((error) => console.error("Error closing task:", error));
-  };
+    const addProject = async (newProject) => {
+        try {
+            const response = await apis.post("/projects", newProject);
+            setAllProjects((prevProjects) => [...prevProjects, response.data]);
+        } catch (error) {
+            console.error("Error adding project:", error);
+        }
+    };
 
 
 
-  return (
+    const deleteProject = async (projectId) => {
+        try {
+            await apis.delete(`/projects/${projectId}`);
+            setAllProjects((prevProjects) => prevProjects.filter((project) => project.id !== projectId));
+        } catch (error) {
+            console.error("Error deleting project:", error);
+        }
+    };
+
+    const updateProject = async (updatedProject) => {
+        try {
+
+            const response = await apis.post(`/projects/${updatedProject.id}`, {
+                ...updatedProject,
+                is_favorite: updatedProject.is_favorite
+
+            });
+
+
+
+            setAllProjects((prevProjects) =>
+                prevProjects.map((project) =>
+                    project.id === updatedProject.id ? response.data : project
+                )
+            );
+
+        } catch (error) {
+            console.error("Error updating project:", error);
+        }
+    };
+
+
+
+    const deleteTask = async (taskId) => {
+        try {
+            await apis.delete(`/tasks/${taskId}`);
+            setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        }
+    };
+    const closeTask = async (taskId) => {
+        try {
+            const response = await apis.post(`/tasks/${taskId}/close`);
+
+            setTasks((prevTasks) =>
+                prevTasks.map((task) =>
+                    task.id === taskId ? { ...task, isCompleted: true } : task
+                )
+            );
+
+            return response.data;
+        } catch (error) {
+            console.error("Error closing task:", error);
+        }
+    };
+
+
+    const addTask = async (newTask) => {
+        try {
+            const response = await apis.post("/tasks", newTask);
+
+
+            setTasks((prevTasks) => [...prevTasks, response.data]);
+
+
+            return response.data;
+        } catch (error) {
+            console.error("Error adding task:", error);
+        }
+    };
+
+    const updateTask = async (id, taskData) => {
+
+
+
+        try {
+            const response = await apis.post(`/tasks/${id}`, taskData);
+            return response.data;
+        } catch (error) {
+            console.error("Error in API request:", error);
+            throw error;
+        }
+    };
+
+
+    return (
     <ProjectContext.Provider
       value={{
         api,
@@ -106,8 +166,10 @@ export const ProjectProvider = ({ children }) => {
         setTasksCompleted,
         tasks,
         setTasks,
+          addTask,
         deleteTask,
         closeTask,
+          updateTask
       }}
     >
       {children}

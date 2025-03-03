@@ -45,7 +45,7 @@ const Projects = () => {
   };
 
   const handleProjectUpdated = (updatedProject) => {
-    message.success("project updated successfully !")
+
     updateProject(updatedProject);
   };
 
