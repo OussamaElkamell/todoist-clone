@@ -19,26 +19,32 @@ const CompletedTasks = () => {
     const { projects, tasksCompleted, inbox } = useProjects();
     const [selectedProject, setSelectedProject] = useState("all");
     const [searchValue, setSearchValue] = useState("");
+    console.log("selected", selectedProject);
+    console.log("tasksCompleted", projects);
 
+    // Filter projects based on search input
     const filteredProjects = projects.filter((project) =>
         project.name.toLowerCase().includes(searchValue.toLowerCase())
     );
 
+    // Filter tasks based on selected project
     const filteredTasks =
         selectedProject === "all"
             ? tasksCompleted
             : selectedProject === "inbox"
-                ? tasksCompleted.filter((task) => task.project_id === inbox.id)
-                : tasksCompleted.filter((task) => task.project_id === selectedProject);
+                ? tasksCompleted.filter((task) => task.project_id === inbox.id) // Filter tasks for the inbox
+                : tasksCompleted.filter((task) => task.project_id === selectedProject); // Filter tasks by project_id
 
+    // Attach project names and parse completion times
     const tasksWithProjects = filteredTasks.map((task) => ({
         ...task,
         project: projects.find((p) => p.id === task.project_id) || {
             name: "Inbox",
-        },
-        completedAt: task.completed_at ? dayjs(task.completed_at) : null,
+        }, // Default to "Inbox" if no project_id
+        completedAt: task.completed_at ? dayjs(task.completed_at) : null, // Ensure valid parsing
     }));
 
+    // Group tasks by date
     const groupedTasks = {};
     const now = dayjs();
 
@@ -69,6 +75,7 @@ const CompletedTasks = () => {
     return (
         <div className="flex flex-col items-center justify-center w-full h-screen p-5 font-sans pl-60">
             <div className="w-[45%] absolute top-20">
+                {/* Filter Dropdown */}
                 <div className="flex flex-row items-center gap-2 mb-4 custom-select">
                     <h1 className="text-3xl font-bold">Activity:</h1>
                     <style>
@@ -77,8 +84,7 @@ const CompletedTasks = () => {
             font-size: 30px !important;
             font-weight:bold
         }
-    `}
-                    </style>
+    `}</style>
                     <Select
                         value={selectedProject}
                         onChange={setSelectedProject}
@@ -92,6 +98,7 @@ const CompletedTasks = () => {
                         optionLabelProp="label"
                         dropdownRender={(menu) => (
                             <div>
+                                {/* Search Input Inside Dropdown */}
                                 <div className="p-2">
                                     <Input
                                         placeholder="Type a project name"
@@ -104,7 +111,7 @@ const CompletedTasks = () => {
                                 {menu}
                             </div>
                         )}
-                        bordered={false}
+                        bordered={false} // Removes the default border
                     >
                         <Option value="all" label="All Projects">
                             # All Projects
@@ -131,12 +138,14 @@ const CompletedTasks = () => {
                     </Select>
                 </div>
 
+                {/* Completed Tasks List */}
                 <DragDropContext>
                     <Droppable droppableId="completedTasksList">
                         {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
                                 {Object.entries(groupedTasks).map(([dateKey, tasks]) => (
                                     <div key={dateKey} className="mb-4">
+                                        {/* Section Header with Date Formatting */}
                                         <h2 className="mt-8 mb-2 font-bold text-black text-2x6 mt-15">
                                             {dateKey}
                                         </h2>
@@ -160,12 +169,13 @@ const CompletedTasks = () => {
                                                                     : ""
                                                             }`}
                                                         >
+                                                            {/* User Avatar */}
                                                             <Avatar
                                                                 style={{
                                                                     backgroundColor: "#fde3cf",
                                                                     color: "#f56a00",
-                                                                    width: "40px",
-                                                                    height: "40px",
+                                                                    width: "50px",
+                                                                    height: "50px",
                                                                     fontSize: "20px",
                                                                 }}
                                                             >
@@ -176,22 +186,23 @@ const CompletedTasks = () => {
                                                             <div
                                                                 style={{
                                                                     position: "absolute",
-                                                                    marginLeft: "30px",
+                                                                    marginLeft: "40px",
                                                                     marginTop: "20px",
-                                                                    width: "10px",
-                                                                    height: "10px",
+                                                                    width: "15px",
+                                                                    height: "15px",
                                                                     borderRadius: "50%",
-                                                                    backgroundColor: "#3C9B0D",
+                                                                    backgroundColor: "#3C9B0D", // Light green background
                                                                     display: "flex",
                                                                     alignItems: "center",
                                                                     justifyContent: "center",
                                                                 }}
                                                             >
                                                                 <MdDone
-                                                                    style={{ color: "white", fontSize: "24px" }}
+                                                                    style={{ color: "white", fontSize: "30px" }}
                                                                 />
                                                             </div>
 
+                                                            {/* Task Details */}
                                                             <div className="flex flex-col flex-grow ml-3">
                                                                 <p className="text-[16px]">
                                                                     <span style={{ fontWeight: 600 }}>You </span>
@@ -202,8 +213,15 @@ const CompletedTasks = () => {
                                                                         {task.description}
                                                                     </p>
                                                                 )}
+                                                                {/* Completed Time */}
+                                                                {task.completedAt && (
+                                                                    <p className="text-[12px] text-gray-500 mt-1 ml-1">
+                                                                        {task.completedAt.format("h:mm A")}
+                                                                    </p>
+                                                                )}
                                                             </div>
 
+                                                            {/* Project Name */}
                                                             <span style={{ fontSize: "12px", color: "grey" }}>
                                 {task.project.name} #
                               </span>
