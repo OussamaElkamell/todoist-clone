@@ -105,7 +105,7 @@ const Favorites = () => {
                     className="w-full"
                     onClick={() => setSelectedProjectId(project.id)}
                   >
-                    <Link className={"inbox-text"} to={`/my-projects/${project.name}`}>
+                    <Link className={"inbox-text"} style={{ textDecoration: 'none', color: 'inherit' }} to={`/my-projects/${project.name}`}>
                       <div className="flex items-center">
                         <span
                           className="text-[18px] font-semibold mr-2"

@@ -134,6 +134,18 @@ export const ProjectProvider = ({ children }) => {
             throw error;
         }
     };
+    const getCompletedTasks = async () => {
+        try {
+            const { data } = await apis.get(API_CONFIG.COMPLETED_TASKS_URL);
+            setTasksCompleted(data.items || []);
+        } catch (error) {
+            console.error("Error fetching completed tasks:", error);
+        }
+    };
+
+    useEffect(() => {
+        getCompletedTasks();
+    }, []);
 
 
     return (

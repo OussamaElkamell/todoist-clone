@@ -52,13 +52,13 @@ const SidebarItems = () => {
         <span className="font-medium text-[14px] text-[#A82206]">Add Task</span>
       </div>
 
-      {/* Add Task Modal */}
+
       <AddTaskModal
         open={tasksmodalVisible}
         onClose={() => setTasksModalVisible(false)}
       />
 
-      {/* Inbox */}
+
       {inbox && (
         <Link to={`/my-projects/${inbox.name}`}>
           <div className="mb-4" onClick={() => setSelectedProjectId(inbox.id)}>
@@ -89,12 +89,37 @@ const SidebarItems = () => {
         </Link>
       )}
 
+        <Link to="/completed">
+            <div className="mb-4" onClick={() => setSelectedProjectId("completed")}>
+                <ul>
+                    <li
+                        className={`font-medium text-[17px] p-2 pl-2 rounded cursor-pointer ${
+                            selectedProjectId === "completed"
+                                ? "bg-[#FFEFE5] text-orange-700"
+                                : "hover:bg-gray-200 text-gray-600"
+                        }`}
+                    >
+                        <div className="flex items-center">
+                            <CheckCircleOutlined
+                                className={`text-xl mr-2 ${
+                                    selectedProjectId === "completed"
+                                        ? "text-orange-700"
+                                        : "text-gray-600"
+                                }`}
+                            />
+                            <span className="text-sm font-normal">Completed</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </Link>
 
 
-      {/* Favorites Section */}
+
+
       <Favorites />
 
-      {/* Projects Section */}
+
       <Projects />
     </div>
   );

@@ -120,12 +120,13 @@ const Projects = () => {
                   ? "bg-[#FFEFE5] text-orange-700"
                   : "hover:bg-gray-200"
               }`}
+
             >
               <div
                 className="w-full"
                 onClick={() => setSelectedProjectId(project.id)}
               >
-                <Link className={"inbox-text"} to={`/my-projects/${project.name}`}>
+                <Link  style={{ textDecoration: 'none', color: 'inherit' }} className={"inbox-text"} to={`/my-projects/${project.name}`}>
                   <div className="flex items-center">
                     <span
                       className="text-[18px] font-semibold mr-2"

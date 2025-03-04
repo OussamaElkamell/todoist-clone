@@ -1,0 +1,227 @@
+import React, { useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
+import { Select, Input, Avatar } from "antd";
+import { useProjects } from "../../../context/ProjectContext";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import weekday from "dayjs/plugin/weekday";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import { MdDone } from "react-icons/md";
+
+dayjs.extend(relativeTime);
+dayjs.extend(weekday);
+dayjs.extend(localizedFormat);
+
+const { Option, OptGroup } = Select;
+
+const CompletedTasks = () => {
+    const { projects, tasksCompleted, inbox } = useProjects();
+    const [selectedProject, setSelectedProject] = useState("all");
+    const [searchValue, setSearchValue] = useState("");
+
+    const filteredProjects = projects.filter((project) =>
+        project.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    const filteredTasks =
+        selectedProject === "all"
+            ? tasksCompleted
+            : selectedProject === "inbox"
+                ? tasksCompleted.filter((task) => task.project_id === inbox.id)
+                : tasksCompleted.filter((task) => task.project_id === selectedProject);
+
+    const tasksWithProjects = filteredTasks.map((task) => ({
+        ...task,
+        project: projects.find((p) => p.id === task.project_id) || {
+            name: "Inbox",
+        },
+        completedAt: task.completed_at ? dayjs(task.completed_at) : null,
+    }));
+
+    const groupedTasks = {};
+    const now = dayjs();
+
+    tasksWithProjects.forEach((task) => {
+        if (task.completedAt && task.completedAt.isValid()) {
+            let dateKey;
+            if (task.completedAt.isSame(now, "day")) {
+                dateKey = `${task.completedAt.format(
+                    "MMM D"
+                )} ‧ Today ‧ ${task.completedAt.format("dddd")}`;
+            } else if (task.completedAt.isSame(now.subtract(1, "day"), "day")) {
+                dateKey = `${task.completedAt.format(
+                    "MMM D"
+                )} ‧ Yesterday ‧ ${task.completedAt.format("dddd")}`;
+            } else {
+                dateKey = `${task.completedAt.format(
+                    "MMM D"
+                )} ‧ ${task.completedAt.format("dddd")}`;
+            }
+
+            if (!groupedTasks[dateKey]) {
+                groupedTasks[dateKey] = [];
+            }
+            groupedTasks[dateKey].push(task);
+        }
+    });
+
+    return (
+        <div className="flex flex-col items-center justify-center w-full h-screen p-5 font-sans pl-60">
+            <div className="w-[45%] absolute top-20">
+                <div className="flex flex-row items-center gap-2 mb-4 custom-select">
+                    <h1 className="text-3xl font-bold">Activity:</h1>
+                    <style>
+                        {`
+        .custom-select .ant-select-selection-item {
+            font-size: 30px !important;
+            font-weight:bold
+        }
+    `}
+                    </style>
+                    <Select
+                        value={selectedProject}
+                        onChange={setSelectedProject}
+                        style={{
+                            minWidth: "220px",
+                            border: "none",
+                            outline: "none",
+                            fontWeight: "bold",
+                        }}
+                        dropdownStyle={{ borderRadius: "8px" }}
+                        optionLabelProp="label"
+                        dropdownRender={(menu) => (
+                            <div>
+                                <div className="p-2">
+                                    <Input
+                                        placeholder="Type a project name"
+                                        prefix={<SearchOutlined />}
+                                        value={searchValue}
+                                        onChange={(e) => setSearchValue(e.target.value)}
+                                        allowClear
+                                    />
+                                </div>
+                                {menu}
+                            </div>
+                        )}
+                        bordered={false}
+                    >
+                        <Option value="all" label="All Projects">
+                            # All Projects
+                        </Option>
+                        <Option value="inbox" label="Inbox">
+                            <div className="flex items-center gap-2">
+                                <InboxOutlined />
+                                Inbox
+                            </div>
+                        </Option>
+                        <OptGroup label="My Projects">
+                            {filteredProjects.map((project) => (
+                                <Option
+                                    key={project.id}
+                                    value={project.id}
+                                    label={project.name}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        # {project.name}
+                                    </div>
+                                </Option>
+                            ))}
+                        </OptGroup>
+                    </Select>
+                </div>
+
+                <DragDropContext>
+                    <Droppable droppableId="completedTasksList">
+                        {(provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps}>
+                                {Object.entries(groupedTasks).map(([dateKey, tasks]) => (
+                                    <div key={dateKey} className="mb-4">
+                                        <h2 className="mt-8 mb-2 font-bold text-black text-2x6 mt-15">
+                                            {dateKey}
+                                        </h2>
+
+                                        <ul className="p-0 list-none">
+                                            {tasks.map((task, index) => (
+                                                <Draggable
+                                                    key={task.id}
+                                                    draggableId={task.id.toString()}
+                                                    index={index}
+                                                >
+                                                    {(provided, snapshot) => (
+                                                        <li
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            className={`flex items-center p-4 px-0 text-[16px] border-b border-gray-300 cursor-pointer group 
+                                                        ${
+                                                                snapshot.isDragging
+                                                                    ? "bg-gray-200 shadow-lg"
+                                                                    : ""
+                                                            }`}
+                                                        >
+                                                            <Avatar
+                                                                style={{
+                                                                    backgroundColor: "#fde3cf",
+                                                                    color: "#f56a00",
+                                                                    width: "40px",
+                                                                    height: "40px",
+                                                                    fontSize: "20px",
+                                                                }}
+                                                            >
+                                                                {task.user
+                                                                    ? task.user.charAt(0).toUpperCase()
+                                                                    : "U"}
+                                                            </Avatar>
+                                                            <div
+                                                                style={{
+                                                                    position: "absolute",
+                                                                    marginLeft: "30px",
+                                                                    marginTop: "20px",
+                                                                    width: "10px",
+                                                                    height: "10px",
+                                                                    borderRadius: "50%",
+                                                                    backgroundColor: "#3C9B0D",
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                }}
+                                                            >
+                                                                <MdDone
+                                                                    style={{ color: "white", fontSize: "24px" }}
+                                                                />
+                                                            </div>
+
+                                                            <div className="flex flex-col flex-grow ml-3">
+                                                                <p className="text-[16px]">
+                                                                    <span style={{ fontWeight: 600 }}>You </span>
+                                                                    completed a task: {task.content}
+                                                                </p>
+                                                                {task.description && (
+                                                                    <p className="text-[13px] text-gray-600">
+                                                                        {task.description}
+                                                                    </p>
+                                                                )}
+                                                            </div>
+
+                                                            <span style={{ fontSize: "12px", color: "grey" }}>
+                                {task.project.name} #
+                              </span>
+                                                        </li>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+            </div>
+        </div>
+    );
+};
+
+export default CompletedTasks;
