@@ -16,7 +16,7 @@ const App = () => {
           <Sidebar />
           <Routes>
             <Route path="/" element={<MyProjectsPage />} />
-            <Route
+              <Route
               path="/my-projects/:projectName"
               element={<SingleProjectPage />}
             />
