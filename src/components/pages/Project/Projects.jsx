@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import { message } from "antd";
 
 import AddProjectModal from "../../Layout/CreateProjectModal";
@@ -30,7 +30,7 @@ const Projects = () => {
     hoveredProjectId,
     editingProject,
   } = useSelector((state) => state.projects);
-
+  console.log("sssssssselllll",selectedProjectId)
   const [projectsVisible, setProjectsVisible] = useState(true);
 
   useEffect(() => {

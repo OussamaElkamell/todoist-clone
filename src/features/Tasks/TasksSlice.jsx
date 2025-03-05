@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apis from "../../../services/api";
+import {API_CONFIG} from "../../../config/apiConfig.js";
 
 // Async actions
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
@@ -22,10 +23,13 @@ export const closeTask = createAsyncThunk("tasks/closeTask", async (taskId) => {
     return { taskId, isCompleted: true };
 });
 export const updateTask = createAsyncThunk("tasks/updateTask", async (updatedTask) => {
-    const response = await apis.put(`/tasks/${updatedTask.id}`, updatedTask);
+    const response = await apis.post(`/tasks/${updatedTask.id}`, updatedTask);
     return response.data;
 });
-
+export const fetchCompletedTasks = createAsyncThunk("tasks/fetchCompletedTasks", async () => {
+    const response = await apis.get(API_CONFIG.COMPLETED_TASKS_URL); // Adjust the endpoint as needed
+    return response.data.items || response.data;
+});
 // Slice
 const tasksSlice = createSlice({
     name: "tasks",
@@ -33,6 +37,7 @@ const tasksSlice = createSlice({
         tasks: [],
         status: "idle",
         error: null,
+        completedTasks: [],
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -47,8 +52,14 @@ const tasksSlice = createSlice({
                 state.tasks = state.tasks.filter((task) => task.id !== action.payload);
             })
             .addCase(closeTask.fulfilled, (state, action) => {
-                const task = state.tasks.find((t) => t.id === action.payload.taskId);
-                if (task) task.isCompleted = true;
+                const taskIndex = state.tasks.findIndex((t) => t.id === action.payload.taskId);
+                if (taskIndex !== -1) {
+                    // Update the task immutably
+                    state.tasks[taskIndex] = {
+                        ...state.tasks[taskIndex],
+                        is_completed: true, // Ensure this property is updated
+                    };
+                }
             })
             .addCase(updateTask.fulfilled, (state, action) => {
                 const updatedTask = action.payload;
@@ -56,6 +67,9 @@ const tasksSlice = createSlice({
                 if (index !== -1) {
                     state.tasks[index] = updatedTask;
                 }
+            })
+            .addCase(fetchCompletedTasks.fulfilled, (state, action) => {
+                state.completedTasks = action.payload; // Ensure this matches the API response
             });
 
 

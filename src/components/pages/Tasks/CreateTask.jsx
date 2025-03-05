@@ -4,6 +4,7 @@ import { DatePicker, Dropdown, Menu, Button, Select ,message} from "antd";
 import { FaCalendar, FaFlag, FaBell } from "react-icons/fa";
 import { IoFlagOutline } from "react-icons/io5";
 import { LuAlarmClock } from "react-icons/lu";
+import {useSelector} from "react-redux";
 const CreateTask = ({
   onAddTask,
   onUpdateTask,
@@ -12,11 +13,11 @@ const CreateTask = ({
   initialData,
   taskBeingEdited,
 }) => {
-  const { allProjects, projects, inbox, selectedProjectId, setTasks } =
+  const { allProjects, projects, inbox,setTasks } =
     useProjects();
+  const selectedProjectId = useSelector((state) => state.projects.selectedProjectId);
 
-
-
+  console.log("selectedProjectIddddddd",selectedProjectId)
   const [taskContent, setTaskContent] = useState(initialData?.content || "");
   const [taskDescription, setTaskDescription] = useState(
     initialData?.description || ""

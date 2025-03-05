@@ -98,7 +98,7 @@ const projectsSlice = createSlice({
 });
 
 // Export actions
-export const { setSelectedProjectId, setProjectsModalVisible, setSelectedColor, setHoveredProjectId, setEditingProject ,setFavorites} =
+export const { setSelectedProjectId, setProjectsModalVisible, setSelectedColor, setHoveredProjectId, setEditingProject ,setFavorites,selectedProjectId} =
     projectsSlice.actions;
 
 export default projectsSlice.reducer;

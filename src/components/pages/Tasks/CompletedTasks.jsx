@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
 import { Select, Input, Avatar } from "antd";
@@ -8,6 +8,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import weekday from "dayjs/plugin/weekday";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { MdDone } from "react-icons/md";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchCompletedTasks} from "../../../features/Tasks/TasksSlice.jsx";
 
 dayjs.extend(relativeTime);
 dayjs.extend(weekday);
@@ -16,14 +18,22 @@ dayjs.extend(localizedFormat);
 const { Option, OptGroup } = Select;
 
 const CompletedTasks = () => {
-    const { projects, tasksCompleted, inbox } = useProjects();
+    const { inbox } = useProjects();
+    const tasksCompleted = useSelector((state) => state.tasks.completedTasks);
     const [selectedProject, setSelectedProject] = useState("all");
     const [searchValue, setSearchValue] = useState("");
-    console.log("selected", selectedProject);
-    console.log("tasksCompleted", projects);
+    const dispatch = useDispatch();
+    const {
+        allProjects
 
+    } = useSelector((state) => state.projects);
+    console.log("selected", selectedProject);
+    console.log("tasksCompleted",tasksCompleted );
+    useEffect(() => {
+        dispatch(fetchCompletedTasks());
+    }, [dispatch]);
     // Filter projects based on search input
-    const filteredProjects = projects.filter((project) =>
+    const filteredProjects = allProjects.filter((project) =>
         project.name.toLowerCase().includes(searchValue.toLowerCase())
     );
 
@@ -38,7 +48,7 @@ const CompletedTasks = () => {
     // Attach project names and parse completion times
     const tasksWithProjects = filteredTasks.map((task) => ({
         ...task,
-        project: projects.find((p) => p.id === task.project_id) || {
+        project: allProjects.find((p) => p.id === task.project_id) || {
             name: "Inbox",
         }, // Default to "Inbox" if no project_id
         completedAt: task.completed_at ? dayjs(task.completed_at) : null, // Ensure valid parsing
