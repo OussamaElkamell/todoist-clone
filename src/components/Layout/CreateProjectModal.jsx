@@ -36,7 +36,7 @@ const CreateProjectModal = ({
     }, [open, editingProject]);
 
     const handleAddOrUpdateProject = () => {
-        if (loading) return; // Prevent multiple dispatches if already loading
+        if (loading) return;
         setLoading(true);
 
         const projectData = {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Select } from "antd";
-import { colorOptions } from "../../../context/ColorOptions";
+import { colorOptions } from "../../../Colors/ColorOptions";
 
 const ProjectColors = ({ selectedColor, setSelectedColor }) => {
   console.log(selectedColor);

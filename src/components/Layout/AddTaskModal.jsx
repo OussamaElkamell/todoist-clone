@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Button, DatePicker, Dropdown, Menu, message, Modal, Select } from "antd";
-import { useDispatch, useSelector } from "react-redux";  // Import necessary hooks
+import { useDispatch, useSelector } from "react-redux";
 import { FaCalendar } from "react-icons/fa";
 import { IoFlagOutline } from "react-icons/io5";
 import { LuAlarmClock } from "react-icons/lu";
 import { addTask } from "../../features/Tasks/TasksSlice.jsx";
 
 const AddTaskModal = ({ open, onClose }) => {
-    const dispatch = useDispatch();  // Set up dispatch
-    const { allProjects, selectedProjectId, inbox, projects } = useSelector(state => state.projects); // Assuming you have the projects in your redux store
-
+    const dispatch = useDispatch();
+    const { allProjects, selectedProjectId, inbox, projects } = useSelector(state => state.projects);
     const [loading, setLoading] = useState(false);
     const [taskContent, setTaskContent] = useState("");
     const [taskDescription, setTaskDescription] = useState("");

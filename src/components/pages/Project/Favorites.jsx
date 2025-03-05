@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import AddProjectModal from "../../Layout/CreateProjectModal";
-import { colorOptions } from "../../../context/ColorOptions";
+import { colorOptions } from "../../../Colors/ColorOptions";
 import MoreOptions from "./MoreOptions";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import { addProject, updateProject, deleteProject, setSelectedProjectId, setProj
 const Favorites = () => {
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.projects.favorites);
-  console.log("projects",favorites)
+
   const selectedProjectId = useSelector((state) => state.projects.selectedProjectId);
   const projectsModalVisible = useSelector((state) => state.projects.projectsModalVisible);
   const selectedColor = useSelector((state) => state.projects.selectedColor);
@@ -28,7 +28,7 @@ const Favorites = () => {
     dispatch(setSelectedColor("charcoal"));
     dispatch(setEditingProject(null));
   };
-  console.log('favorites',favorites)
+
   return (
       <div className="mb-4">
         {favorites.length > 0 && (

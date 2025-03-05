@@ -6,7 +6,7 @@ import { message } from "antd";
 
 import AddProjectModal from "../../Layout/CreateProjectModal";
 import MoreOptions from "./MoreOptions";
-import { colorOptions } from "../../../context/ColorOptions";
+import { colorOptions } from "../../../Colors/ColorOptions";
 
 import {
   addProject,
@@ -17,24 +17,24 @@ import {
   setSelectedColor,
   setEditingProject,
   setHoveredProjectId,
-  fetchProjects, // Make sure to import fetchProjects
+  fetchProjects,
 } from "../../../features/Projects/ProjectSlice.jsx";
 
 const Projects = () => {
   const dispatch = useDispatch();
   const {
-    allProjects, // Use allProjects here
+    allProjects,
     selectedProjectId,
     projectsmodalVisible,
     selectedColor,
     hoveredProjectId,
     editingProject,
   } = useSelector((state) => state.projects);
-  console.log("sssssssselllll",selectedProjectId)
+
   const [projectsVisible, setProjectsVisible] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchProjects()); // Fetch projects when the component mounts
+    dispatch(fetchProjects());
   }, [dispatch]);
 
   const getHashtagColor = (project) => {

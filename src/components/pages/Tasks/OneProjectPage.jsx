@@ -23,11 +23,12 @@ const OneProjectPage = () => {
     const selectedProjectId = useSelector((state) => state.projects.selectedProjectId);
     const {
         allProjects,
+        inbox
+
 
 
     } = useSelector((state) => state.projects);
-    console.log("allppp",allProjects)
-    console.log("tasks", tasks);
+
     const { projectName } = useParams();
     const [isHovered, setIsHovered] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -35,7 +36,7 @@ const OneProjectPage = () => {
     const [isAddTaskVisible, setIsAddTaskVisible] = useState(false);
     const [taskBeingEdited, setTaskBeingEdited] = useState(null);
     const [loading, setLoading] = useState(true);
-    console.log("selectedProject", selectedProjectId);
+
 
     useEffect(() => {
         setEditedProjectName(projectName);
@@ -56,10 +57,27 @@ const OneProjectPage = () => {
         fetchTasksForProject();
     }, [dispatch, projectName]);
 
-    // Filter tasks based on the selected project
-    const filteredTasks = tasks.filter(
-        (task) => task.project_id === selectedProjectId
-    );
+
+    useEffect(() => {
+        if (projectName === "Inbox" && inbox) {
+
+            dispatch(setSelectedProjectId(inbox.id));
+        } else {
+            const matchedProject = allProjects.find((project) => project.name === projectName);
+            if (matchedProject) {
+                dispatch(setSelectedProjectId(matchedProject.id));
+            }
+        }
+    }, [allProjects, inbox, projectName, dispatch]);
+
+
+    const filteredTasks = tasks.filter((task) => {
+        if (projectName === "Inbox") {
+            return task.project_id === inbox?.id;
+        } else {
+            return task.project_id === selectedProjectId;
+        }
+    });
     useEffect(() => {
         const matchedProject = allProjects.find(
             (project) => project.name === projectName
@@ -72,7 +90,7 @@ const OneProjectPage = () => {
     }, [allProjects, projectName]);
     const handleAddTask = async (newTask) => {
         try {
-            // Include the selectedProjectId in the newTask object
+
             const taskWithProjectId = { ...newTask, project_id: selectedProjectId };
             await dispatch(addTask(taskWithProjectId));
         } catch (error) {
@@ -125,13 +143,13 @@ const OneProjectPage = () => {
             const reorderedTasks = [...filteredTasks];
             const [movedTask] = reorderedTasks.splice(source.index, 1);
             reorderedTasks.splice(destination.index, 0, movedTask);
-            // Update local state for reordering (you may need to dispatch an action to update the backend)
+
         } else {
             const movedTask = filteredTasks.find((task) => task.id === result.draggableId);
             if (movedTask) {
                 try {
                     await dispatch(updateTask({ ...movedTask, projectId: destinationProjectId })).unwrap();
-                    // Refetch tasks to update the UI
+
                     await dispatch(fetchTasks());
                 } catch (error) {
                     console.error("Error updating task project:", error);
@@ -186,7 +204,7 @@ const OneProjectPage = () => {
                                                             taskBeingEdited={taskBeingEdited}
                                                             onDeleteTask={handleDeleteTask}
                                                             onAddTask={handleAddTask}
-                                                            selectedProjectId={selectedProjectId} // Pass selectedProjectId to AddTask
+                                                            selectedProjectId={selectedProjectId}
                                                         />
                                                     ) : (
                                                         <>
@@ -238,7 +256,7 @@ const OneProjectPage = () => {
                         <AddTask
                             onAddTask={handleAddTask}
                             onCancel={() => setIsAddTaskVisible(false)}
-                            selectedProjectId={selectedProjectId} // Pass selectedProjectId to AddTask
+                            selectedProjectId={selectedProjectId}
                         />
                     ) : (
                         <div

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useProjects } from "../../../context/ProjectContext";
+
 import { DatePicker, Dropdown, Menu, Button, Select ,message} from "antd";
 import { FaCalendar, FaFlag, FaBell } from "react-icons/fa";
 import { IoFlagOutline } from "react-icons/io5";
@@ -13,11 +13,17 @@ const CreateTask = ({
   initialData,
   taskBeingEdited,
 }) => {
-  const { allProjects, projects, inbox,setTasks } =
-    useProjects();
-  const selectedProjectId = useSelector((state) => state.projects.selectedProjectId);
 
-  console.log("selectedProjectIddddddd",selectedProjectId)
+
+  const {
+
+    inbox,
+    selectedProjectId,
+      allProjects
+
+
+  } = useSelector((state) => state.projects);
+
   const [taskContent, setTaskContent] = useState(initialData?.content || "");
   const [taskDescription, setTaskDescription] = useState(
     initialData?.description || ""
@@ -26,7 +32,7 @@ const CreateTask = ({
     initialData?.projectId ||
       selectedProjectId ||
       inbox?.id ||
-      (projects[0] && projects[0].id) ||
+      (allProjects[0] && allProjects[0].id) ||
       null
   );
   const [loading, setLoading] = useState(false);

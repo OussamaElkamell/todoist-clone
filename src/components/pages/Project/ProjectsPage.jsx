@@ -13,7 +13,7 @@ import {
   setEditingProject,
   setSelectedColor
 } from "../../../features/Projects/ProjectSlice.jsx";
-import { colorOptions } from "../../../context/ColorOptions";
+import { colorOptions } from "../../../Colors/ColorOptions";
 import AddProjectModal from "../../Layout/CreateProjectModal";
 import MoreOptions from "./MoreOptions";
 
@@ -25,7 +25,7 @@ const ProjectsPage = () => {
     selectedColor,
     editingProject,
   } = useSelector((state) => state.projects);
-  console.log("projects",allProjects)
+
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredProjectId, setHoveredProjectId] = useState(null);
 

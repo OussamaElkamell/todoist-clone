@@ -2,14 +2,14 @@ import React, {useEffect, useState} from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
 import { Select, Input, Avatar } from "antd";
-import { useProjects } from "../../../context/ProjectContext";
+
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import weekday from "dayjs/plugin/weekday";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { MdDone } from "react-icons/md";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchCompletedTasks} from "../../../features/Tasks/TasksSlice.jsx";
+import {fetchCompletedTasks } from "../../../features/Tasks/TasksSlice.jsx";
 
 dayjs.extend(relativeTime);
 dayjs.extend(weekday);
@@ -18,43 +18,43 @@ dayjs.extend(localizedFormat);
 const { Option, OptGroup } = Select;
 
 const CompletedTasks = () => {
-    const { inbox } = useProjects();
+
     const tasksCompleted = useSelector((state) => state.tasks.completedTasks);
     const [selectedProject, setSelectedProject] = useState("all");
     const [searchValue, setSearchValue] = useState("");
     const dispatch = useDispatch();
     const {
-        allProjects
+        allProjects,
+        inbox
 
     } = useSelector((state) => state.projects);
-    console.log("selected", selectedProject);
-    console.log("tasksCompleted",tasksCompleted );
+
     useEffect(() => {
         dispatch(fetchCompletedTasks());
     }, [dispatch]);
-    // Filter projects based on search input
+
     const filteredProjects = allProjects.filter((project) =>
         project.name.toLowerCase().includes(searchValue.toLowerCase())
     );
 
-    // Filter tasks based on selected project
+
     const filteredTasks =
         selectedProject === "all"
             ? tasksCompleted
             : selectedProject === "inbox"
-                ? tasksCompleted.filter((task) => task.project_id === inbox.id) // Filter tasks for the inbox
-                : tasksCompleted.filter((task) => task.project_id === selectedProject); // Filter tasks by project_id
+                ? tasksCompleted.filter((task) => task.project_id === inbox.id)
+                : tasksCompleted.filter((task) => task.project_id === selectedProject);
 
-    // Attach project names and parse completion times
+
     const tasksWithProjects = filteredTasks.map((task) => ({
         ...task,
         project: allProjects.find((p) => p.id === task.project_id) || {
             name: "Inbox",
-        }, // Default to "Inbox" if no project_id
-        completedAt: task.completed_at ? dayjs(task.completed_at) : null, // Ensure valid parsing
+        },
+        completedAt: task.completed_at ? dayjs(task.completed_at) : null,
     }));
 
-    // Group tasks by date
+
     const groupedTasks = {};
     const now = dayjs();
 
@@ -121,7 +121,7 @@ const CompletedTasks = () => {
                                 {menu}
                             </div>
                         )}
-                        bordered={false} // Removes the default border
+                        bordered={false}
                     >
                         <Option value="all" label="All Projects">
                             # All Projects
@@ -201,7 +201,7 @@ const CompletedTasks = () => {
                                                                     width: "15px",
                                                                     height: "15px",
                                                                     borderRadius: "50%",
-                                                                    backgroundColor: "#3C9B0D", // Light green background
+                                                                    backgroundColor: "#3C9B0D",
                                                                     display: "flex",
                                                                     alignItems: "center",
                                                                     justifyContent: "center",

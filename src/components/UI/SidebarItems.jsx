@@ -3,13 +3,21 @@ import { Link } from "react-router-dom";
 import Favorites from "../pages/Project/Favorites";
 import Projects from "../pages/Project/Projects";
 import AddTaskModal from "../Layout/AddTaskModal";
-import { useProjects } from "../../context/ProjectContext";
+
 import { IoIosAddCircle } from "react-icons/io";
 import { Avatar } from "antd";
 import { InboxOutlined, CheckCircleOutlined } from "@ant-design/icons";
-
+import {useSelector} from "react-redux";
+import {setSelectedProjectId} from "../../features/Projects/ProjectSlice.jsx"
 const SidebarItems = () => {
-  const { inbox, selectedProjectId, setSelectedProjectId } = useProjects();
+
+    const {
+
+        inbox,
+        selectedProjectId,
+
+
+    } = useSelector((state) => state.projects);
   const [tasksmodalVisible, setTasksModalVisible] = useState(false);
 
   return (

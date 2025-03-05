@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apis from "../../../services/api";
 import {API_CONFIG} from "../../../config/apiConfig.js";
 
-// Async actions
+
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
     const response = await apis.get("/tasks");
     return response.data;
@@ -27,10 +27,10 @@ export const updateTask = createAsyncThunk("tasks/updateTask", async (updatedTas
     return response.data;
 });
 export const fetchCompletedTasks = createAsyncThunk("tasks/fetchCompletedTasks", async () => {
-    const response = await apis.get(API_CONFIG.COMPLETED_TASKS_URL); // Adjust the endpoint as needed
+    const response = await apis.get(API_CONFIG.COMPLETED_TASKS_URL);
     return response.data.items || response.data;
 });
-// Slice
+
 const tasksSlice = createSlice({
     name: "tasks",
     initialState: {
@@ -54,10 +54,10 @@ const tasksSlice = createSlice({
             .addCase(closeTask.fulfilled, (state, action) => {
                 const taskIndex = state.tasks.findIndex((t) => t.id === action.payload.taskId);
                 if (taskIndex !== -1) {
-                    // Update the task immutably
+
                     state.tasks[taskIndex] = {
                         ...state.tasks[taskIndex],
-                        is_completed: true, // Ensure this property is updated
+                        is_completed: true,
                     };
                 }
             })
@@ -69,7 +69,7 @@ const tasksSlice = createSlice({
                 }
             })
             .addCase(fetchCompletedTasks.fulfilled, (state, action) => {
-                state.completedTasks = action.payload; // Ensure this matches the API response
+                state.completedTasks = action.payload;
             });
 
 

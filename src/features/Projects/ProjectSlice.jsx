@@ -31,6 +31,7 @@ const projectsSlice = createSlice({
         selectedProjectId: null,
         projectsmodalVisible: false,
         favorites: [],
+        inbox:[],
         selectedColor: "charcoal",
         hoveredProjectId: null,
         editingProject: null,
@@ -62,7 +63,8 @@ const projectsSlice = createSlice({
             .addCase(fetchProjects.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.allProjects = action.payload.filter((project) => project.name !== "Inbox");
-
+                const inbox = action.payload.find((project) => project.name === "Inbox");
+                state.inbox = inbox;
                 state.favorites = action.payload.filter(project => project.is_favorite);
             })
             .addCase(fetchProjects.rejected, (state, action) => {
